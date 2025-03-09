@@ -5,7 +5,7 @@ const Awards = () => {
   const awards = [
     {
       title: "Smart India Hackathon 2024",
-      description: "Winner in the Software domain (Internal Round), selected for the SIH Finals."
+      description: "Finalist in SIH 2024."
     },
     {
       title: "Merit-based Scholarship",
