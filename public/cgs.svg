@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background elements -->
+  <rect width="400" height="300" fill="#f8f8f8" rx="10" ry="10"/>
+  
+  <!-- Main circular background -->
+  <circle cx="200" cy="150" r="100" fill="#e6f0fa" stroke="#3366cc" stroke-width="3"/>
+  
+  <!-- Decorative outer ring
+  <circle cx="200" cy="150" r="115" fill="none" stroke="#3366cc" stroke-width="2" stroke-dasharray="4,2"/>
+   -->
+  <!-- CGS Initials -->
+  <text x="200" y="170" font-family="Georgia" font-size="70" font-weight="bold" text-anchor="middle" fill="#2c3e50">CGS</text>
+  
+  <!-- Full name 
+  <text x="200" y="240" font-family="Arial" font-size="16" font-weight="normal" text-anchor="middle" fill="#555555">Cherukuri Gaurav Sushant</text>
+  -->
+  <!-- Subtle decorative elements 
+  <path d="M125,100 Q200,60 275,100" fill="none" stroke="#3366cc" stroke-width="2"/>
+  <path d="M125,200 Q200,240 275,200" fill="none" stroke="#3366cc" stroke-width="2"/>
+  
+  <!-- Small accent circles -->
+  <circle cx="125" cy="100" r="5" fill="#3366cc"/>
+  <circle cx="275" cy="100" r="5" fill="#3366cc"/>
+  <circle cx="125" cy="200" r="5" fill="#3366cc"/>
+  <circle cx="275" cy="200" r="5" fill="#3366cc"/>-->
+</svg>
