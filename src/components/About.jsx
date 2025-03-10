@@ -30,7 +30,7 @@ const About = () => {
               <h4 className="text-lg font-semibold text-blue-700">Bachelor of Technology (B.Tech.)</h4>
               <p className="text-gray-700">Data Science & Artificial Intelligence</p>
               <p className="text-gray-600">ICFAI Foundation for Higher Education, Hyderabad</p>
-              <p className="text-gray-600">Aug 2021 – Jun 2024</p>
+              <p className="text-gray-600">Aug 2021 – Jun 2025</p>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
               <h4 className="text-lg font-semibold text-blue-700">Deep Learning Specialization</h4>
