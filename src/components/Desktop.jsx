@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   User, 
@@ -9,10 +9,15 @@ import {
   Folder,
   Terminal as TerminalIcon,
   FileText,
-  Database
+  Database,
+  Grid3X3,
+  Layout,
+  Settings as SettingsIcon
 } from 'lucide-react';
 import WindowManager from './WindowManager';
 import StartMenu from './StartMenu';
+import SystemTray from './SystemTray';
+import ContextMenu from './ContextMenu';
 import About from './About';
 import Skills from './Skills';
 import Experience from './Experience';
@@ -20,6 +25,7 @@ import Projects from './Projects';
 import Awards from './Awards';
 import Contact from './Contact';
 import Terminal from './Terminal';
+import Settings from './Settings';
 
 const Desktop = () => {
   const [openWindows, setOpenWindows] = useState({});
@@ -27,13 +33,90 @@ const Desktop = () => {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
   const [windowZIndex, setWindowZIndex] = useState(10);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [focusedWindow, setFocusedWindow] = useState(null);
+  const [contextMenu, setContextMenu] = useState({ isOpen: false, position: { x: 0, y: 0 }, type: 'desktop' });
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: 'info',
+      title: 'Welcome to Gaurav OS',
+      message: 'Your portfolio desktop is ready to explore!',
+      timestamp: new Date().toLocaleTimeString()
+    }
+  ]);
+  const [snapPreview, setSnapPreview] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Windows key or Cmd key to open start menu
+      if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) {
+        e.preventDefault();
+        setIsStartMenuOpen(!isStartMenuOpen);
+      }
+      
+      // Alt + Tab for window switching
+      if (e.altKey && e.key === 'Tab') {
+        e.preventDefault();
+        const windowIds = Object.keys(openWindows);
+        if (windowIds.length > 0) {
+          const currentIndex = windowIds.indexOf(focusedWindow);
+          const nextIndex = (currentIndex + 1) % windowIds.length;
+          focusWindow(windowIds[nextIndex]);
+        }
+      }
+      
+      // Windows + D to minimize all windows
+      if (e.metaKey && e.key === 'd') {
+        e.preventDefault();
+        Object.keys(openWindows).forEach(windowId => {
+          setMinimizedWindows(prev => ({ ...prev, [windowId]: true }));
+        });
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isStartMenuOpen, openWindows, focusedWindow]);
+
+  // Handle right-click context menu
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    setContextMenu({
+      isOpen: true,
+      position: { x: e.clientX, y: e.clientY },
+      type: 'desktop'
+    });
+  };
+
+  const closeContextMenu = () => {
+    setContextMenu({ ...contextMenu, isOpen: false });
+  };
+
+  // Notification management
+  const addNotification = (notification) => {
+    const newNotification = {
+      ...notification,
+      id: Date.now(),
+      timestamp: new Date().toLocaleTimeString()
+    };
+    setNotifications(prev => [newNotification, ...prev]);
+  };
+
+  const dismissNotification = (id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+  };
 
   const desktopIcons = [
     { id: 'about', title: 'About.exe', icon: <User size={24} />, position: { x: 50, y: 100 } },
@@ -43,6 +126,7 @@ const Desktop = () => {
     { id: 'awards', title: 'Awards.exe', icon: <Award size={24} />, position: { x: 150, y: 200 } },
     { id: 'contact', title: 'Mail.exe', icon: <Mail size={24} />, position: { x: 150, y: 300 } },
     { id: 'terminal', title: 'Terminal', icon: <TerminalIcon size={24} />, position: { x: 250, y: 100 } },
+    { id: 'settings', title: 'Settings', icon: <SettingsIcon size={24} />, position: { x: 250, y: 200 } },
   ];
 
   const windowConfigs = {
@@ -87,6 +171,12 @@ const Desktop = () => {
       icon: <TerminalIcon size={16} className="text-green-400" />,
       component: (props) => <Terminal {...props} onExit={() => closeWindow('terminal')} />,
       size: { width: 800, height: 600 }
+    },
+    settings: { 
+      title: 'Settings - System Configuration', 
+      icon: <SettingsIcon size={16} className="text-purple-400" />,
+      component: Settings,
+      size: { width: 900, height: 700 }
     }
   };
 
@@ -94,6 +184,7 @@ const Desktop = () => {
     if (!openWindows[windowId]) {
       const newZIndex = windowZIndex + 1;
       setWindowZIndex(newZIndex);
+      setFocusedWindow(windowId);
       setOpenWindows(prev => ({
         ...prev,
         [windowId]: {
@@ -105,16 +196,34 @@ const Desktop = () => {
         }
       }));
       setMinimizedWindows(prev => ({ ...prev, [windowId]: false }));
+      
+      // Add notification for window opening
+      addNotification({
+        type: 'info',
+        title: 'Application Opened',
+        message: `${windowConfigs[windowId].title} is now running`
+      });
     } else {
       // Bring to front
       const newZIndex = windowZIndex + 1;
       setWindowZIndex(newZIndex);
+      setFocusedWindow(windowId);
       setOpenWindows(prev => ({
         ...prev,
         [windowId]: { ...prev[windowId], zIndex: newZIndex }
       }));
       setMinimizedWindows(prev => ({ ...prev, [windowId]: false }));
     }
+  };
+
+  const focusWindow = (windowId) => {
+    const newZIndex = windowZIndex + 1;
+    setWindowZIndex(newZIndex);
+    setFocusedWindow(windowId);
+    setOpenWindows(prev => ({
+      ...prev,
+      [windowId]: { ...prev[windowId], zIndex: newZIndex }
+    }));
   };
 
   const closeWindow = (windowId) => {
@@ -137,7 +246,11 @@ const Desktop = () => {
 
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div 
+      className="min-h-screen relative overflow-hidden"
+      onContextMenu={handleContextMenu}
+      onClick={closeContextMenu}
+    >
       {/* Desktop Background Layers */}
       <div className="fixed inset-0">
         {/* Base gradient */}
@@ -286,6 +399,19 @@ const Desktop = () => {
         </motion.div>
       ))}
 
+      {/* Snap Preview */}
+      {snapPreview && (
+        <div 
+          className="fixed bg-blue-500/20 border-2 border-blue-500/50 rounded-lg z-20"
+          style={{
+            left: snapPreview.x,
+            top: snapPreview.y,
+            width: snapPreview.width,
+            height: snapPreview.height
+          }}
+        />
+      )}
+
       {/* Windows */}
       {Object.entries(openWindows).map(([windowId, windowState]) => {
         const config = windowConfigs[windowId];
@@ -301,74 +427,87 @@ const Desktop = () => {
             initialSize={config.size}
             onClose={() => closeWindow(windowId)}
             onMinimize={() => minimizeWindow(windowId)}
+            onFocus={focusWindow}
             isMinimized={minimizedWindows[windowId]}
             zIndex={windowState.zIndex}
           >
-            <Component />
+            {typeof Component === 'function' ? <Component /> : Component}
           </WindowManager>
         );
       })}
 
-      {/* Taskbar */}
-      <div className="fixed bottom-0 left-0 right-0 h-14 bg-slate-900/95 backdrop-blur-xl border-t border-slate-600/30 flex items-center justify-between px-6 z-30 shadow-2xl">
+      {/* Modern Taskbar */}
+      <div className="fixed bottom-0 left-0 right-0 h-16 bg-slate-900/95 backdrop-blur-xl border-t border-slate-600/30 flex items-center justify-between px-6 z-30 shadow-2xl">
         <div className="flex items-center space-x-4">
           {/* Start Button */}
           <motion.button
             onClick={() => setIsStartMenuOpen(!isStartMenuOpen)}
-            className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-lg transition-all duration-300 shadow-lg"
+            className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-300 shadow-lg ${
+              isStartMenuOpen 
+                ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+                : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600'
+            }`}
             whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(59, 130, 246, 0.3)" }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-7 h-7 bg-white rounded-md flex items-center justify-center text-blue-600 text-sm font-bold shadow-inner">
-              GS
+            <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center text-blue-600 text-sm font-bold shadow-inner">
+              <Grid3X3 size={16} />
             </div>
-            <span className="text-white text-sm font-mono font-semibold">Start</span>
+            <span className="text-white text-sm font-semibold">Start</span>
           </motion.button>
+
+          {/* Quick Actions */}
+          <div className="flex items-center space-x-2">
+            <motion.button
+              className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 transition-colors"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              title="Task View"
+            >
+              <Layout size={18} className="text-slate-300" />
+            </motion.button>
+          </div>
 
           {/* Taskbar Items */}
           <div className="flex space-x-2">
             {Object.entries(openWindows).map(([windowId, windowState]) => {
               const config = windowConfigs[windowId];
+              const isFocused = focusedWindow === windowId;
               return (
                 <motion.button
                   key={windowId}
                   onClick={() => openWindow(windowId)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 relative ${
                     minimizedWindows[windowId] 
-                      ? 'bg-slate-700/50 text-slate-400 border border-slate-600/30' 
-                      : 'bg-slate-700/80 text-slate-200 border border-slate-500/30 shadow-md'
+                      ? 'bg-slate-700/30 text-slate-400 border border-slate-600/20' 
+                      : isFocused
+                      ? 'bg-blue-600/20 text-blue-200 border border-blue-500/30 shadow-md'
+                      : 'bg-slate-700/50 text-slate-200 border border-slate-500/20 shadow-md hover:bg-slate-600/50'
                   }`}
-                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(51, 65, 85, 0.9)' }}
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   {config.icon}
-                  <span className="text-xs font-mono max-w-24 truncate">
+                  <span className="text-xs font-medium max-w-24 truncate">
                     {config.title.split(' - ')[0]}
                   </span>
+                  {isFocused && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-blue-400 rounded-full" />
+                  )}
                 </motion.button>
               );
             })}
           </div>
         </div>
         
-        {/* System Tray */}
-        <div className="flex items-center space-x-6">
-          {/* System indicators */}
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-slate-400 text-xs font-mono">Online</span>
-          </div>
-          
-          {/* Time and Date */}
-          <div className="flex items-center space-x-4 bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-600/30">
-            <div className="text-slate-200 text-sm font-mono font-semibold">
-              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </div>
-            <div className="text-slate-400 text-sm font-mono">
-              {currentTime.toLocaleDateString([], { month: 'short', day: 'numeric' })}
-            </div>
-          </div>
-        </div>
+        {/* Enhanced System Tray */}
+        <SystemTray 
+          currentTime={currentTime}
+          notifications={notifications}
+          onDismissNotification={dismissNotification}
+          onClearNotifications={clearAllNotifications}
+          onOpenSettings={() => openWindow('settings')}
+        />
       </div>
 
       {/* Start Menu */}
@@ -376,6 +515,14 @@ const Desktop = () => {
         isOpen={isStartMenuOpen}
         onClose={() => setIsStartMenuOpen(false)}
         onOpenWindow={openWindow}
+      />
+
+      {/* Context Menu */}
+      <ContextMenu 
+        isOpen={contextMenu.isOpen}
+        position={contextMenu.position}
+        type={contextMenu.type}
+        onClose={closeContextMenu}
       />
     </div>
   );

@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Desktop from "./components/Desktop";
 import PageLoader from "./components/PageLoader";
 import ParticleBackground from "./components/ParticleBackground";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   useEffect(() => {
@@ -13,13 +14,15 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="font-mono">
-        <ParticleBackground />
-        <PageLoader />
-        <Desktop />
-      </div>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <div className="font-mono">
+          <ParticleBackground />
+          <PageLoader />
+          <Desktop />
+        </div>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
