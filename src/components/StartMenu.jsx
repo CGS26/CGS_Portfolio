@@ -117,7 +117,13 @@ const StartMenu = ({ isOpen, onClose, onOpenWindow }) => {
             
             {/* Footer */}
             <div className="p-2 border-t border-slate-600/50 flex justify-between">
-              <button className="flex items-center space-x-2 px-3 py-2 rounded hover:bg-slate-700/50 transition-colors">
+              <button
+                onClick={() => {
+                  onOpenWindow('settings');
+                  onClose();
+                }}
+                className="flex items-center space-x-2 px-3 py-2 rounded hover:bg-slate-700/50 transition-colors"
+              >
                 <Settings size={16} className="text-slate-400" />
                 <span className="text-slate-300 font-mono text-xs">Settings</span>
               </button>
