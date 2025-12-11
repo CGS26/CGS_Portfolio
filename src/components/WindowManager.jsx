@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 import { X, Minimize2, Square, Maximize2, RotateCcw } from 'lucide-react';
 
 const WindowManager = ({ 
@@ -17,6 +18,7 @@ const WindowManager = ({
   onSnapRight,
   onFocus
 }) => {
+  const theme = useTheme();
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
   const [isDragging, setIsDragging] = useState(false);
@@ -176,8 +178,8 @@ const WindowManager = ({
   return (
     <motion.div
       ref={windowRef}
-      className={`fixed bg-slate-800/95 backdrop-blur-md rounded-lg shadow-2xl border overflow-hidden ${
-        isSnapped ? 'border-blue-500/50' : 'border-slate-600/50'
+      className={`fixed ${theme.colors.surface} backdrop-blur-md rounded-lg shadow-2xl border overflow-hidden ${
+        isSnapped ? 'border-blue-500/50' : theme.colors.border
       } ${isDragging ? 'shadow-3xl' : ''}`}
       style={{
         left: position.x,
@@ -204,7 +206,7 @@ const WindowManager = ({
         className={`px-4 py-3 flex items-center justify-between border-b cursor-grab active:cursor-grabbing ${
           isSnapped 
             ? 'bg-gradient-to-r from-blue-700 to-blue-600 border-blue-500/50' 
-            : 'bg-gradient-to-r from-slate-700 to-slate-600 border-slate-600'
+            : `${theme.colors.surface} ${theme.colors.border}`
         }`}
         onMouseDown={handleMouseDown}
         onDoubleClick={handleMaximize}
@@ -216,7 +218,7 @@ const WindowManager = ({
               {windowIcon}
             </div>
           )}
-          <span className="text-white text-sm font-semibold select-none">{title}</span>
+          <span className={`${theme.colors.text} text-sm font-semibold select-none`}>{title}</span>
           {isSnapped && (
             <div className="px-2 py-1 bg-blue-500/30 rounded text-xs text-blue-200">
               {isSnapped === 'left' ? 'Snapped Left' : 'Snapped Right'}
@@ -224,35 +226,22 @@ const WindowManager = ({
           )}
         </div>
         
-        <div className="flex items-center space-x-3 window-controls">
-          {/* Modern window controls */}
-          <button
-            onClick={onMinimize}
-            className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10 transition-colors group"
-            title="Minimize"
-          >
-            <Minimize2 size={14} className="text-slate-300 group-hover:text-white" />
-          </button>
-          
-          <button
-            onClick={handleMaximize}
-            className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10 transition-colors group"
-            title={isMaximized || isSnapped ? "Restore" : "Maximize"}
-          >
-            {isMaximized || isSnapped ? (
-              <RotateCcw size={14} className="text-slate-300 group-hover:text-white" />
-            ) : (
-              <Maximize2 size={14} className="text-slate-300 group-hover:text-white" />
-            )}
-          </button>
-          
+        <div className="flex space-x-2 window-controls">
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded hover:bg-red-500 transition-colors group"
+            className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 transition-colors"
             title="Close"
-          >
-            <X size={14} className="text-slate-300 group-hover:text-white" />
-          </button>
+          />
+          <button
+            onClick={onMinimize}
+            className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-400 transition-colors"
+            title="Minimize"
+          />
+          <button
+            onClick={handleMaximize}
+            className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-400 transition-colors"
+            title={isMaximized || isSnapped ? "Restore" : "Maximize"}
+          />
         </div>
       </div>
       

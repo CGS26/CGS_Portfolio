@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 import { 
-  Wifi, 
   Battery, 
   Volume2, 
   Bluetooth, 
@@ -15,10 +15,10 @@ import {
 import NotificationCenter from './NotificationCenter';
 
 const SystemTray = ({ currentTime, notifications, onDismissNotification, onClearNotifications, onOpenSettings }) => {
+  const theme = useTheme();
   const [batteryLevel, setBatteryLevel] = useState(85);
   const [wifiStrength, setWifiStrength] = useState(4);
   const [volume, setVolume] = useState(75);
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [systemStats, setSystemStats] = useState({
     cpu: 45,
     memory: 62,
@@ -58,9 +58,9 @@ const SystemTray = ({ currentTime, notifications, onDismissNotification, onClear
   };
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-2">
       {/* System Performance Indicators */}
-      <div className="hidden md:flex items-center space-x-3 bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-600/30">
+      <div className={`hidden md:flex items-center space-x-2 ${theme.colors.surface} px-2 py-1 rounded-lg ${theme.colors.border} border`}>
         <div className="flex items-center space-x-1" title={`CPU: ${systemStats.cpu}%`}>
           <Cpu size={14} className="text-blue-400" />
           <div className="w-8 h-1 bg-slate-600 rounded-full overflow-hidden">
@@ -93,10 +93,10 @@ const SystemTray = ({ currentTime, notifications, onDismissNotification, onClear
       </div>
 
       {/* System Icons */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-1">
         {/* WiFi */}
         <motion.div 
-          className="p-2 rounded hover:bg-slate-700/50 cursor-pointer transition-colors"
+          className={`p-1.5 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover}`}
           whileHover={{ scale: 1.1 }}
           title="WiFi Connected"
         >
@@ -107,30 +107,30 @@ const SystemTray = ({ currentTime, notifications, onDismissNotification, onClear
 
         {/* Bluetooth */}
         <motion.div 
-          className="p-2 rounded hover:bg-slate-700/50 cursor-pointer transition-colors"
+          className={`p-1.5 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover}`}
           whileHover={{ scale: 1.1 }}
           title="Bluetooth On"
         >
-          <Bluetooth size={16} className="text-blue-400" />
+          <Bluetooth size={14} className="text-blue-400" />
         </motion.div>
 
         {/* Volume */}
         <motion.div 
-          className="p-2 rounded hover:bg-slate-700/50 cursor-pointer transition-colors"
+          className={`p-1.5 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover}`}
           whileHover={{ scale: 1.1 }}
           title={`Volume: ${volume}%`}
         >
-          <Volume2 size={16} className="text-slate-300" />
+          <Volume2 size={14} className={theme.colors.textSecondary} />
         </motion.div>
 
         {/* Battery */}
         <motion.div 
-          className="p-2 rounded hover:bg-slate-700/50 cursor-pointer transition-colors"
+          className={`p-1.5 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover}`}
           whileHover={{ scale: 1.1 }}
           title={`Battery: ${Math.round(batteryLevel)}%`}
         >
           <div className="relative">
-            <Battery size={16} className={getBatteryColor()} />
+            <Battery size={14} className={getBatteryColor()} />
             <div className="absolute inset-0 flex items-center justify-center">
               <div 
                 className={`w-2 h-1 ${getBatteryColor().replace('text-', 'bg-')} rounded-sm`}
@@ -142,13 +142,13 @@ const SystemTray = ({ currentTime, notifications, onDismissNotification, onClear
 
         {/* Theme Toggle */}
         <motion.button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-2 rounded hover:bg-slate-700/50 transition-colors"
+          onClick={theme.toggleTheme}
+          className={`p-2 rounded transition-colors ${theme.colors.surfaceHover}`}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           title="Toggle Theme"
         >
-          {isDarkMode ? (
+          {theme.isDarkMode ? (
             <Sun size={16} className="text-yellow-400" />
           ) : (
             <Moon size={16} className="text-slate-400" />
@@ -165,21 +165,21 @@ const SystemTray = ({ currentTime, notifications, onDismissNotification, onClear
         {/* Settings */}
         <motion.button
           onClick={onOpenSettings}
-          className="p-2 rounded hover:bg-slate-700/50 transition-colors"
+          className={`p-1.5 rounded transition-colors ${theme.colors.surfaceHover}`}
           whileHover={{ scale: 1.1, rotate: 90 }}
           whileTap={{ scale: 0.95 }}
           title="Settings"
         >
-          <Settings size={16} className="text-slate-300" />
+          <Settings size={14} className={theme.colors.textSecondary} />
         </motion.button>
       </div>
       
       {/* Time and Date */}
-      <div className="flex flex-col items-end bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-600/30">
-        <div className="text-white text-sm font-bold font-mono">
+      <div className={`flex flex-col items-end ${theme.colors.surface} px-3 py-1.5 rounded-lg ${theme.colors.border} border`}>
+        <div className={`${theme.colors.text} text-sm font-bold font-mono`}>
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>
-        <div className="text-slate-400 text-xs font-mono">
+        <div className={`${theme.colors.textMuted} text-xs font-mono`}>
           {currentTime.toLocaleDateString([], { 
             weekday: 'short', 
             month: 'short', 

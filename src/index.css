@@ -8,8 +8,20 @@ body {
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0f172a;
   overflow-x: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark theme (default) */
+body.dark,
+html.dark body {
+  background: #0f172a;
+}
+
+/* Light theme */
+body.light,
+html.light body {
+  background: #f8fafc;
 }
 
 code {
@@ -21,17 +33,32 @@ code {
   width: 8px;
 }
 
-::-webkit-scrollbar-track {
+/* Dark theme scrollbar */
+.dark ::-webkit-scrollbar-track {
   background: #1e293b;
 }
 
-::-webkit-scrollbar-thumb {
+.dark ::-webkit-scrollbar-thumb {
   background: #475569;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
+}
+
+/* Light theme scrollbar */
+.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* OS Window animations */

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 import { 
   User, 
   Code, 
@@ -28,6 +29,7 @@ import Terminal from './Terminal';
 import Settings from './Settings';
 
 const Desktop = () => {
+  const theme = useTheme();
   const [openWindows, setOpenWindows] = useState({});
   const [minimizedWindows, setMinimizedWindows] = useState({});
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
@@ -254,7 +256,7 @@ const Desktop = () => {
       {/* Desktop Background Layers */}
       <div className="fixed inset-0">
         {/* Base gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900"></div>
+        <div className={`absolute inset-0 bg-gradient-to-br ${theme.colors.background}`}></div>
         
         {/* Animated gradient overlay */}
         <motion.div 
@@ -437,39 +439,27 @@ const Desktop = () => {
       })}
 
       {/* Modern Taskbar */}
-      <div className="fixed bottom-0 left-0 right-0 h-16 bg-slate-900/95 backdrop-blur-xl border-t border-slate-600/30 flex items-center justify-between px-6 z-30 shadow-2xl">
-        <div className="flex items-center space-x-4">
+      <div className={`fixed bottom-0 left-0 right-0 h-12 ${theme.colors.surface} backdrop-blur-xl border-t ${theme.colors.border} flex items-center justify-between px-3 z-30 shadow-2xl`}>
+        <div className="flex items-center space-x-2">
           {/* Start Button */}
           <motion.button
             onClick={() => setIsStartMenuOpen(!isStartMenuOpen)}
-            className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-300 shadow-lg ${
+            className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-300 shadow-lg ${
               isStartMenuOpen 
                 ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
                 : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600'
             }`}
-            whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(59, 130, 246, 0.3)" }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center text-blue-600 text-sm font-bold shadow-inner">
-              <Grid3X3 size={16} />
+            <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center text-blue-600 text-xs font-bold">
+              GS
             </div>
-            <span className="text-white text-sm font-semibold">Start</span>
+            <span className="text-white text-sm font-semibold hidden sm:block">Start</span>
           </motion.button>
 
-          {/* Quick Actions */}
-          <div className="flex items-center space-x-2">
-            <motion.button
-              className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              title="Task View"
-            >
-              <Layout size={18} className="text-slate-300" />
-            </motion.button>
-          </div>
-
           {/* Taskbar Items */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-0.5">
             {Object.entries(openWindows).map(([windowId, windowState]) => {
               const config = windowConfigs[windowId];
               const isFocused = focusedWindow === windowId;
@@ -477,22 +467,24 @@ const Desktop = () => {
                 <motion.button
                   key={windowId}
                   onClick={() => openWindow(windowId)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 relative ${
+                  className={`flex items-center space-x-1 px-1.5 py-1.5 rounded transition-all duration-300 relative ${
                     minimizedWindows[windowId] 
-                      ? 'bg-slate-700/30 text-slate-400 border border-slate-600/20' 
+                      ? `${theme.colors.surface} ${theme.colors.textMuted}` 
                       : isFocused
-                      ? 'bg-blue-600/20 text-blue-200 border border-blue-500/30 shadow-md'
-                      : 'bg-slate-700/50 text-slate-200 border border-slate-500/20 shadow-md hover:bg-slate-600/50'
+                      ? 'bg-blue-600/20 text-blue-200 border border-blue-500/30'
+                      : `${theme.colors.surface} ${theme.colors.textSecondary} ${theme.colors.surfaceHover}`
                   }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {config.icon}
-                  <span className="text-xs font-medium max-w-24 truncate">
+                  <div className="w-4 h-4 flex items-center justify-center">
+                    {config.icon}
+                  </div>
+                  <span className="text-xs max-w-12 truncate hidden md:block">
                     {config.title.split(' - ')[0]}
                   </span>
                   {isFocused && (
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-blue-400 rounded-full" />
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-blue-400 rounded-full" />
                   )}
                 </motion.button>
               );
