@@ -492,8 +492,8 @@ const Desktop = () => {
           </div>
         </div>
         
-        {/* Enhanced System Tray */}
-        <SystemTray 
+        {/* Windows-like Sidebar */}
+        <SystemTray
           currentTime={currentTime}
           notifications={notifications}
           onDismissNotification={dismissNotification}
