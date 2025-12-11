@@ -493,7 +493,36 @@ const Desktop = () => {
         
         {/* Radial gradient for depth */}
         <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20"></div>
-        
+
+        {/* Welcome Message - Portfolio Branding */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-0 pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 0.8, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="text-white/50 text-lg font-bold mb-2"
+          >
+            <span className="text-blue-400">Welcome to</span>
+            <span className="text-white ml-2">CGS OS</span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 0.6, y: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="text-white/40 text-sm font-mono"
+          >
+            Gaurav Sushant's Portfolio Desktop
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 0.3, scale: 1 }}
+            transition={{ duration: 1.5, delay: 1, repeat: Infinity, repeatType: "reverse" }}
+            className="mt-4 text-blue-400/30 text-xs font-mono"
+          >
+            💻 Double-click icons to explore
+          </motion.div>
+        </div>
+
         {/* Subtle watermark */}
         <div className="absolute bottom-20 right-8 opacity-20">
           <motion.div
@@ -503,24 +532,55 @@ const Desktop = () => {
           >
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 bg-blue-500/30 rounded-sm"></div>
-              <span>Gaurav OS v2024.12</span>
+              <span>Gaurav OS v2024.12 - Portfolio Edition</span>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Desktop Icons */}
+      {/* Desktop Icons - Enhanced with Draggable Functionality */}
       {desktopIcons.map((icon, index) => (
         <motion.div
           key={icon.id}
-          className="fixed cursor-pointer group desktop-icon-glow"
+          className="fixed cursor-pointer group desktop-icon-glow z-10"
           style={{ left: icon.position.x, top: icon.position.y }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.5 }}
-          whileHover={{ scale: 1.1, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          onDoubleClick={() => openWindow(icon.id)}
+          transition={{ delay: index * 0.1, duration: 0.5, type: "spring", stiffness: 200 }}
+          whileHover={{
+            scale: 1.15,
+            y: -5,
+            transition: { type: "spring", stiffness: 300 }
+          }}
+          whileTap={{ scale: 0.9 }}
+          whileDrag={{ scale: 1.2, rotate: 2 }}
+          drag
+          dragConstraints={{ left: 0, right: window.innerWidth - 80, top: 0, bottom: window.innerHeight - 120 }}
+          dragElastic={0.1}
+          dragTransition={{ bounceStiffness: 500, bounceDamping: 20 }}
+          onDragEnd={(event, info) => {
+            // Update icon position
+            const newIcons = desktopIcons.map(i =>
+              i.id === icon.id
+                ? { ...i, position: { x: info.point.x, y: info.point.y } }
+                : i
+            );
+            // This would normally update state, but since we're using static data,
+            // the icons will reset on refresh. For a real app, you'd save positions.
+          }}
+          onDoubleClick={() => {
+            // Add bounce animation on double click
+            const iconElement = event.currentTarget;
+            iconElement.animate([
+              { transform: 'scale(1)' },
+              { transform: 'scale(1.2)' },
+              { transform: 'scale(1)' }
+            ], {
+              duration: 300,
+              easing: 'ease-in-out'
+            });
+            openWindow(icon.id);
+          }}
         >
           <div className="flex flex-col items-center p-3 rounded-xl group-hover:bg-white/10 backdrop-blur-sm transition-all duration-300">
             <div className="w-14 h-14 bg-gradient-to-br from-slate-700/90 to-slate-800/90 backdrop-blur-sm rounded-xl flex items-center justify-center mb-2 text-white shadow-xl border border-white/10 group-hover:border-white/20 transition-all duration-300">
