@@ -1,65 +1,173 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Activity, Cpu, Database, Brain, Settings, Users } from 'lucide-react';
 import SectionHeader from './common/SectionHeader';
-import SkillCategory from './common/SkillCategory';
+import OSWindow from './common/OSWindow';
 
 const Skills = () => {
-  const programmingSkills = [
-    "Java, Python, JavaScript",
-    "HTML, CSS, SQL, Solidity",
-    "Node.js, React.js, Express.js",
-    "Next.js, Angular",
-    "Git, GitHub, Bitbucket",
-    "Django, Flask"
-  ];
+  const [cpuUsage, setCpuUsage] = useState(85);
+  const [memoryUsage, setMemoryUsage] = useState(72);
 
-  const databaseSkills = [
-    "MySQL, MongoDB, MSSQL",
-    "Azure, AWS",
-    "Azure Data Factory (ADF)",
-    "REST API, API Integration",
-    "ETL Processes",
-    "Database Administration"
-  ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCpuUsage(Math.floor(Math.random() * 20) + 75);
+      setMemoryUsage(Math.floor(Math.random() * 15) + 65);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
-  const aiSkills = [
-    "Deep Learning, Machine Learning",
-    "Data Analysis & Visualization",
-    "TensorFlow, Matplotlib",
-    "Predictive Modeling",
-    "Apache Kafka, PySpark",
-    "Apache Flink"
-  ];
-
-  const devopsSkills = [
-    "Microservices",
-    "Docker, Containerization",
-    "Shell Scripting",
-    "Kubernetes",
-    "CI/CD Pipelines",
-    "Cloud Enablement"
-  ];
-
-  const softSkills = [
-    "Effective Communication",
-    "Analytical Thinking",
-    "Problem-Solving",
-    "Team Collaboration",
-    "Project Management",
-    "Attention to Detail"
+  const skillCategories = [
+    {
+      title: "Programming & Development",
+      icon: <Cpu size={20} className="text-blue-400" />,
+      skills: [
+        { name: "Java", level: 90 },
+        { name: "Python", level: 95 },
+        { name: "JavaScript", level: 88 },
+        { name: "React.js", level: 92 },
+        { name: "Node.js", level: 85 },
+        { name: "Next.js", level: 80 }
+      ],
+      color: "blue"
+    },
+    {
+      title: "Database & Cloud",
+      icon: <Database size={20} className="text-green-400" />,
+      skills: [
+        { name: "MySQL", level: 88 },
+        { name: "MongoDB", level: 85 },
+        { name: "Azure", level: 82 },
+        { name: "AWS", level: 78 },
+        { name: "Docker", level: 80 },
+        { name: "Kubernetes", level: 75 }
+      ],
+      color: "green"
+    },
+    {
+      title: "AI & Data Science",
+      icon: <Brain size={20} className="text-purple-400" />,
+      skills: [
+        { name: "Machine Learning", level: 90 },
+        { name: "Deep Learning", level: 88 },
+        { name: "TensorFlow", level: 85 },
+        { name: "Data Analysis", level: 92 },
+        { name: "Apache Kafka", level: 75 },
+        { name: "PySpark", level: 78 }
+      ],
+      color: "purple"
+    },
+    {
+      title: "DevOps & Architecture",
+      icon: <Settings size={20} className="text-orange-400" />,
+      skills: [
+        { name: "Microservices", level: 82 },
+        { name: "CI/CD Pipelines", level: 80 },
+        { name: "Shell Scripting", level: 85 },
+        { name: "API Integration", level: 88 },
+        { name: "ETL Processes", level: 83 },
+        { name: "System Design", level: 80 }
+      ],
+      color: "orange"
+    }
   ];
 
   return (
-    <section id="skills" className="py-20 bg-gray-50">
+    <section id="skills" className="py-20 bg-slate-900/30 relative">
       <div className="container mx-auto px-4">
-        <SectionHeader title="Skills & Expertise" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <SkillCategory title="Programming & Development" skills={programmingSkills} />
-          <SkillCategory title="Database & Cloud" skills={databaseSkills} />
-          <SkillCategory title="AI & Data Science" skills={aiSkills} />
+        <SectionHeader title="System Monitor - Skills.exe" />
+        
+        {/* System Performance Window */}
+        <div className="mb-8">
+          <OSWindow 
+            title="Task Manager - Performance" 
+            windowIcon={<Activity size={16} className="text-red-400" />}
+            className="max-w-md mx-auto"
+          >
+            <div className="p-6">
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-slate-300 font-mono text-sm">Skill Level</span>
+                    <span className="text-blue-400 font-mono text-sm">{cpuUsage}%</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <motion.div 
+                      className="bg-blue-500 h-2 rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${cpuUsage}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-slate-300 font-mono text-sm">Experience</span>
+                    <span className="text-green-400 font-mono text-sm">{memoryUsage}%</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <motion.div 
+                      className="bg-green-500 h-2 rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${memoryUsage}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </OSWindow>
         </div>
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SkillCategory title="DevOps & Architecture" skills={devopsSkills} />
-          <SkillCategory title="Soft Skills" skills={softSkills} />
+
+        {/* Skills Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {skillCategories.map((category, index) => (
+            <OSWindow 
+              key={index}
+              title={`${category.title}.dll`} 
+              windowIcon={category.icon}
+              className="h-fit"
+            >
+              <div className="p-6">
+                <div className="space-y-3">
+                  {category.skills.map((skill, skillIndex) => (
+                    <motion.div 
+                      key={skillIndex}
+                      className="flex items-center justify-between"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 + skillIndex * 0.05 }}
+                    >
+                      <span className="text-slate-300 font-mono text-sm flex-1">{skill.name}</span>
+                      <div className="flex-1 mx-3">
+                        <div className="w-full bg-slate-700 rounded-full h-1.5">
+                          <motion.div 
+                            className={`h-1.5 rounded-full ${
+                              category.color === 'blue' ? 'bg-blue-500' :
+                              category.color === 'green' ? 'bg-green-500' :
+                              category.color === 'purple' ? 'bg-purple-500' :
+                              'bg-orange-500'
+                            }`}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${skill.level}%` }}
+                            transition={{ delay: index * 0.1 + skillIndex * 0.05 + 0.3, duration: 0.8 }}
+                          />
+                        </div>
+                      </div>
+                      <span className={`font-mono text-xs w-8 text-right ${
+                        category.color === 'blue' ? 'text-blue-400' :
+                        category.color === 'green' ? 'text-green-400' :
+                        category.color === 'purple' ? 'text-purple-400' :
+                        'text-orange-400'
+                      }`}>
+                        {skill.level}%
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </OSWindow>
+          ))}
         </div>
       </div>
     </section>

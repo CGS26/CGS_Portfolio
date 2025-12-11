@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Mail, Phone, MapPin, Linkedin, Send, User, MessageSquare } from 'lucide-react';
 import SectionHeader from './common/SectionHeader';
+import OSWindow from './common/OSWindow';
 import emailjs from '@emailjs/browser';
 
 const Contact = () => {
@@ -67,109 +70,132 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-blue-800 text-white">
+    <section id="contact" className="py-20 bg-slate-900/70 relative">
       <div className="container mx-auto px-4">
-        <SectionHeader title="Get In Touch" light={true} />
-      
+        <SectionHeader title="Mail Client - Contact.exe" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            
-            <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
-            <div className="space-y-4">
-              <ContactInfo 
-                icon={<PhoneIcon />} 
-                label="Phone" 
-                value="+91-7337225784" 
-              />
-              <ContactInfo 
-                icon={<EmailIcon />} 
-                label="Email" 
-                value="gauravsushant267@gmail.com" 
-              />
-              <ContactInfo 
-                icon={<LinkedinIcon />} 
-                label="LinkedIn" 
-                value="linkedin.com/in/gaurav-sushant-cherukuri" 
-              />
-              <ContactInfo 
-                icon={<LocationIcon />} 
-                label="Location" 
-                value="Hyderabad, India" 
-              />
-            </div>
-          </div>
-          <div>
-            
-            <h3 className="text-2xl font-semibold mb-6">Send Me a Message</h3>
-          
-           
-            {notification.message && (
-          <div
-            className={`${
-              notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            } text-white p-3 rounded mb-6 flex justify-between items-center`}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Contact Info Window */}
+          <OSWindow 
+            title="Address Book - Contacts" 
+            windowIcon={<User size={16} className="text-blue-400" />}
+            className="h-fit"
           >
-            <span>{notification.message}</span>
-            <button
-              onClick={handleCloseNotification}
-              className="text-white text-xl hover:text-gray-300"
-            >
-              &times; {/* Cross icon (×) */}
-            </button>
-          </div>
-        )}
-          
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-1">Name</label>
-                <input 
-                  type="text" 
-                  id="name" 
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg text-gray-800" 
-                  placeholder="Your Name" 
-                  required 
+            <div className="p-6">
+              <div className="space-y-4">
+                <ContactInfo 
+                  icon={<Phone size={20} className="text-green-400" />} 
+                  label="Phone" 
+                  value="+91-7337225784" 
+                />
+                <ContactInfo 
+                  icon={<Mail size={20} className="text-blue-400" />} 
+                  label="Email" 
+                  value="gauravsushant267@gmail.com" 
+                />
+                <ContactInfo 
+                  icon={<Linkedin size={20} className="text-blue-500" />} 
+                  label="LinkedIn" 
+                  value="linkedin.com/in/gaurav-sushant-cherukuri" 
+                />
+                <ContactInfo 
+                  icon={<MapPin size={20} className="text-red-400" />} 
+                  label="Location" 
+                  value="Hyderabad, India" 
                 />
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-1">Email</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg text-gray-800" 
-                  placeholder="Your Email" 
-                  required 
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-1">Message</label>
-                <textarea 
-                  id="message" 
-                  rows="4" 
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg text-gray-800" 
-                  placeholder="Your Message" 
-                  required
-                ></textarea>
-              </div>
+            </div>
+          </OSWindow>
 
-              {loading ? (
-                  <span>Sending...</span> 
-                ) : (<>
-<button 
-                type="submit" 
-                className="bg-white text-blue-800 px-6 py-3 rounded-lg font-medium hover:bg-blue-100 transition duration-300"
-              > Send Message
-              </button>   </>            )}
-              
-                
-            </form>
-          </div>
+          {/* Email Compose Window */}
+          <OSWindow 
+            title="Compose Message - Mail" 
+            windowIcon={<MessageSquare size={16} className="text-purple-400" />}
+            className="h-fit"
+          >
+            <div className="p-6">
+              {/* Notification */}
+              {notification.message && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`${
+                    notification.type === 'success' 
+                      ? 'bg-green-600/20 border-green-500 text-green-400' 
+                      : 'bg-red-600/20 border-red-500 text-red-400'
+                  } border rounded p-3 mb-4 flex justify-between items-center font-mono text-sm`}
+                >
+                  <span>{notification.message}</span>
+                  <button
+                    onClick={handleCloseNotification}
+                    className="hover:opacity-70 text-lg"
+                  >
+                    ×
+                  </button>
+                </motion.div>
+              )}
+
+              {/* Email Form */}
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-mono text-slate-300 mb-1">From:</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none" 
+                    placeholder="Your Name" 
+                    required 
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-mono text-slate-300 mb-1">Email:</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none" 
+                    placeholder="your.email@domain.com" 
+                    required 
+                  />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-mono text-slate-300 mb-1">Message:</label>
+                  <textarea 
+                    id="message" 
+                    rows="6" 
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none resize-none" 
+                    placeholder="Type your message here..."
+                    required
+                  ></textarea>
+                </div>
+
+                <motion.button 
+                  type="submit" 
+                  disabled={loading}
+                  className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-600 text-white px-4 py-2 rounded font-mono text-sm transition duration-300 w-full"
+                  whileHover={{ scale: loading ? 1 : 1.02 }}
+                  whileTap={{ scale: loading ? 1 : 0.98 }}
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} />
+                      <span>Send Message</span>
+                    </>
+                  )}
+                </motion.button>
+              </form>
+            </div>
+          </OSWindow>
         </div>
       </div>
     </section>
@@ -178,41 +204,21 @@ const Contact = () => {
 
 const ContactInfo = ({ icon, label, value }) => {
   return (
-    <div className="flex items-center">
-      <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center mr-4">
+    <motion.div 
+      className="flex items-center p-3 bg-slate-700/30 rounded border border-slate-600/30 hover:bg-slate-700/50 transition-all"
+      whileHover={{ scale: 1.02 }}
+    >
+      <div className="w-10 h-10 bg-slate-600 rounded flex items-center justify-center mr-4">
         {icon}
       </div>
       <div>
-        <p className="text-gray-200 text-sm">{label}</p>
-        <p className="font-medium">{value}</p>
+        <p className="text-slate-400 text-sm font-mono">{label}</p>
+        <p className="text-slate-200 font-mono text-sm">{value}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-const PhoneIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-  </svg>
-);
 
-const EmailIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-  </svg>
-);
-
-const LinkedinIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-  </svg>
-);
-
-const LocationIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-  </svg>
-);
 
 export default Contact;

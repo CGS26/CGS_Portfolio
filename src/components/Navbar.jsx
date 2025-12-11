@@ -17,33 +17,52 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className={`fixed w-full z-10 px-6 py-4 transition-all duration-300 backdrop-blur-lg ${scrolled ? 'bg-blue-900/80 shadow-lg' : 'bg-transparent'}`}
+      className={`fixed w-full z-40 transition-all duration-300 ${scrolled ? 'top-0' : 'top-0'}`}
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
     >
-      <div className="container mx-auto flex justify-between items-center">
-        <motion.div className="text-2xl font-extrabold text-white tracking-wide" whileHover={{ scale: 1.05 }}>
-          Gaurav Sushant
-        </motion.div>
+      {/* OS Window Title Bar */}
+      <div className="bg-slate-700/95 backdrop-blur-md border-b border-slate-600/50 px-4 py-2">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            {/* Window Controls */}
+            <div className="flex space-x-2">
+              <div className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 cursor-pointer"></div>
+              <div className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-400 cursor-pointer"></div>
+              <div className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-400 cursor-pointer"></div>
+            </div>
+            
+            <motion.div className="text-lg font-bold text-slate-200 tracking-wide flex items-center" whileHover={{ scale: 1.02 }}>
+              <div className="w-6 h-6 bg-blue-600 rounded-sm flex items-center justify-center text-white text-xs font-bold mr-2">
+                GS
+              </div>
+              Portfolio.exe - Gaurav Sushant
+            </motion.div>
+          </div>
 
-        <div className="hidden md:flex space-x-6">
-          {navItems.map((item, index) => (
-            <NavItem key={item.id} {...item} delay={index * 0.1} />
-          ))}
-        </div>
+          <div className="hidden md:flex items-center space-x-1">
+            {navItems.map((item, index) => (
+              <NavItem key={item.id} {...item} delay={index * 0.1} />
+            ))}
+          </div>
 
-        <div className="md:hidden">
-          <motion.button onClick={() => setIsOpen(!isOpen)} className="text-white focus:outline-none" whileTap={{ scale: 0.9 }}>
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
-          </motion.button>
+          <div className="md:hidden">
+            <motion.button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className="text-slate-200 focus:outline-none bg-slate-600 hover:bg-slate-500 p-1 rounded" 
+              whileTap={{ scale: 0.9 }}
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </motion.button>
+          </div>
         </div>
       </div>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="md:hidden bg-blue-800 mt-2 rounded-lg shadow-lg p-4"
+            className="md:hidden bg-slate-700/95 backdrop-blur-md border-b border-slate-600/50 p-4"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -69,12 +88,16 @@ const NavItem = ({ to, title, icon: Icon, mobile, onClick, delay }) => (
       to={to}
       spy={true}
       smooth={true}
-      offset={-70}
+      offset={-100}
       duration={500}
       onClick={onClick}
-      className={`flex items-center gap-2 cursor-pointer text-white ${mobile ? 'block py-2' : 'px-3 py-1 hover:text-blue-300'}`}
+      className={`flex items-center gap-2 cursor-pointer transition-all duration-200 ${
+        mobile 
+          ? 'block py-2 text-slate-200 hover:text-blue-300 hover:bg-slate-600/50 px-2 rounded' 
+          : 'px-3 py-1 text-slate-200 hover:text-blue-300 hover:bg-slate-600/50 rounded-md text-sm'
+      }`}
     >
-      <Icon size={20} />
+      <Icon size={16} />
       <span>{title}</span>
     </Link>
   </motion.div>
