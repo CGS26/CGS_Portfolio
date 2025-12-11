@@ -92,112 +92,178 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
     <div className="relative">
       {/* Windows-like Taskbar - only time visible */}
       <div className="flex items-center space-x-2">
-        {/* Time and Date - Windows style */}
-        <div className={`flex items-center ${theme.colors.surface} px-3 py-1 rounded-lg ${theme.colors.border} border`}>
-          <div className={`${theme.colors.text} text-sm font-bold font-mono`}>
+        {/* Time and Date - Windows style with enhanced UI */}
+        <motion.div
+          className={`flex items-center ${theme.colors.surface} px-3 py-1.5 rounded-lg ${theme.colors.border} border shadow-sm`}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+        >
+          <div className={`${theme.colors.text} text-sm font-bold font-mono mr-2`}>
             {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </div>
-        </div>
+          <div className={`${theme.colors.textMuted} text-xs font-mono`}>
+            {currentTime.toLocaleTimeString([], { hour12: true }).split(' ')[1]}
+          </div>
+        </motion.div>
 
-        {/* Sidebar toggle button - changed to meaningful Settings icon */}
+        {/* Sidebar toggle button - enhanced with Windows-like styling */}
         <motion.button
           onClick={toggleSidebar}
-          className={`p-1.5 rounded transition-colors ${theme.colors.surfaceHover}`}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          className={`p-2 rounded-full transition-colors ${theme.colors.surfaceHover} ${isSidebarOpen ? 'bg-blue-500/20' : ''}`}
+          whileHover={{ scale: 1.15, rotate: isSidebarOpen ? -10 : 10 }}
+          whileTap={{ scale: 0.9 }}
           title="Show hidden system icons"
         >
-          <Settings size={14} className={theme.colors.textSecondary} />
+          <Settings size={16} className={`${theme.colors.textSecondary} ${isSidebarOpen ? 'text-blue-400' : ''}`} />
+          {notifications.length > 0 && (
+            <motion.div
+              className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+            />
+          )}
         </motion.button>
       </div>
 
-      {/* Windows-like Sidebar */}
+      {/* Windows-like Sidebar - Enhanced UI */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
-            className={`absolute right-0 bottom-12 w-64 ${theme.colors.surface} backdrop-blur-md rounded-lg shadow-2xl border ${theme.colors.border} z-50`}
-            initial={{ opacity: 0, x: 20, scale: 0.95 }}
+            className={`absolute right-4 bottom-14 w-72 ${theme.colors.surface} backdrop-blur-xl rounded-xl shadow-2xl border ${theme.colors.border} z-50 overflow-hidden`}
+            initial={{ opacity: 0, x: 30, scale: 0.9 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: 0, x: 30, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            {/* Sidebar Header */}
-            <div className={`p-3 border-b ${theme.colors.border}`}>
+            {/* Windows-like Header with gradient */}
+            <div className={`p-4 border-b ${theme.colors.border} bg-gradient-to-r from-blue-600/10 to-purple-600/10`}>
               <div className="flex items-center justify-between">
-                <h3 className={`${theme.colors.text} font-semibold text-sm`}>Hidden Icons</h3>
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 6H11M6 1V11" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <h3 className={`${theme.colors.text} font-semibold text-sm`}>System Tray</h3>
+                </div>
+                <motion.button
+                  onClick={toggleSidebar}
+                  className={`p-1 rounded ${theme.colors.surfaceHover}`}
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X size={14} className={theme.colors.textSecondary} />
+                </motion.button>
               </div>
             </div>
 
             {/* Sidebar Content */}
-            <div className="p-3 space-y-2">
-              {/* System Icons */}
-              <div className="grid grid-cols-2 gap-2">
-                {/* WiFi */}
+            <div className="p-3 space-y-3">
+              {/* System Icons - Enhanced Windows-like grid */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* WiFi - Enhanced */}
                 <motion.div
-                  className={`p-2 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-2`}
-                  whileHover={{ scale: 1.05 }}
+                  className={`p-3 rounded-lg cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-3 hover:bg-blue-500/10`}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                   title="WiFi Connected"
                 >
-                  <div className="flex items-end space-x-0.5 text-green-400">
-                    {getWifiBars()}
-                  </div>
-                  <span className={`${theme.colors.text} text-xs`}>WiFi</span>
-                </motion.div>
-
-                {/* Bluetooth */}
-                <motion.div
-                  className={`p-2 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-2`}
-                  whileHover={{ scale: 1.05 }}
-                  title="Bluetooth On"
-                >
-                  <Bluetooth size={14} className="text-blue-400" />
-                  <span className={`${theme.colors.text} text-xs`}>Bluetooth</span>
-                </motion.div>
-
-                {/* Volume */}
-                <motion.div
-                  className={`p-2 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-2`}
-                  whileHover={{ scale: 1.05 }}
-                  title={`Volume: ${volume}%`}
-                >
-                  <Volume2 size={14} className={theme.colors.textSecondary} />
-                  <span className={`${theme.colors.text} text-xs`}>Volume</span>
-                </motion.div>
-
-                {/* Battery */}
-                <motion.div
-                  className={`p-2 rounded cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-2`}
-                  whileHover={{ scale: 1.05 }}
-                  title={`Battery: ${Math.round(batteryLevel)}%`}
-                >
-                  <div className="relative">
-                    <Battery size={14} className={getBatteryColor()} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div
-                        className={`w-2 h-1 ${getBatteryColor().replace('text-', 'bg-')} rounded-sm`}
-                        style={{ width: `${batteryLevel * 0.08}px` }}
-                      />
+                  <div className="w-8 h-8 bg-blue-500/10 rounded flex items-end justify-center p-1">
+                    <div className="flex items-end space-x-0.5 text-green-400">
+                      {getWifiBars()}
                     </div>
                   </div>
-                  <span className={`${theme.colors.text} text-xs`}>Battery</span>
+                  <div>
+                    <span className={`${theme.colors.text} text-sm font-medium`}>WiFi</span>
+                    <span className={`${theme.colors.textMuted} text-xs block`}>Connected</span>
+                  </div>
+                </motion.div>
+
+                {/* Bluetooth - Enhanced */}
+                <motion.div
+                  className={`p-3 rounded-lg cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-3 hover:bg-blue-500/10`}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  title="Bluetooth On"
+                >
+                  <div className="w-8 h-8 bg-blue-500/10 rounded flex items-center justify-center">
+                    <Bluetooth size={18} className="text-blue-400" />
+                  </div>
+                  <div>
+                    <span className={`${theme.colors.text} text-sm font-medium`}>Bluetooth</span>
+                    <span className={`${theme.colors.textMuted} text-xs block`}>On</span>
+                  </div>
+                </motion.div>
+
+                {/* Volume - Enhanced */}
+                <motion.div
+                  className={`p-3 rounded-lg cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-3 hover:bg-purple-500/10`}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  title={`Volume: ${volume}%`}
+                >
+                  <div className="w-8 h-8 bg-purple-500/10 rounded flex items-center justify-center">
+                    <Volume2 size={18} className="text-purple-400" />
+                  </div>
+                  <div>
+                    <span className={`${theme.colors.text} text-sm font-medium`}>Volume</span>
+                    <span className={`${theme.colors.textMuted} text-xs block`}>{volume}%</span>
+                  </div>
+                </motion.div>
+
+                {/* Battery - Enhanced */}
+                <motion.div
+                  className={`p-3 rounded-lg cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-3 hover:bg-green-500/10`}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  title={`Battery: ${Math.round(batteryLevel)}%`}
+                >
+                  <div className="w-8 h-8 bg-green-500/10 rounded flex items-center justify-center">
+                    <div className="relative">
+                      <Battery size={18} className={getBatteryColor()} />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div
+                          className={`w-2 h-1.5 ${getBatteryColor().replace('text-', 'bg-')} rounded-sm`}
+                          style={{ width: `${batteryLevel * 0.1}px` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <span className={`${theme.colors.text} text-sm font-medium`}>Battery</span>
+                    <span className={`${theme.colors.textMuted} text-xs block`}>{Math.round(batteryLevel)}%</span>
+                  </div>
                 </motion.div>
               </div>
 
-              {/* System Performance Indicators */}
-              <div className={`mt-3 p-2 rounded-lg ${theme.colors.border} border`}>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Cpu size={14} className="text-blue-400" />
-                      <span className={`${theme.colors.text} text-xs`}>CPU</span>
+              {/* System Performance Indicators - Enhanced */}
+              <div className={`mt-4 p-3 rounded-lg ${theme.colors.border} border bg-gradient-to-r from-blue-500/5 to-purple-500/5`}>
+                <h4 className={`${theme.colors.text} font-semibold text-sm mb-3 flex items-center space-x-2`}>
+                  <span>System Performance</span>
+                  <div className="w-4 h-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 4H7M4 1V7" stroke="white" strokeWidth="1" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                </h4>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-2 rounded hover:bg-blue-500/10 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-6 h-6 bg-blue-500/10 rounded flex items-center justify-center">
+                        <Cpu size={14} className="text-blue-400" />
+                      </div>
+                      <span className={`${theme.colors.text} text-sm font-medium`}>CPU Usage</span>
                     </div>
-                    <div className="w-12 h-1 bg-slate-600 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-blue-400 transition-all duration-500"
+                    <div className="w-16 h-2 bg-slate-600/30 rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full bg-gradient-to-r from-blue-400 to-blue-500 transition-all duration-500"
                         style={{ width: `${systemStats.cpu}%` }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${systemStats.cpu}%` }}
                       />
                     </div>
-                    <span className={`${theme.colors.text} text-xs`}>{systemStats.cpu}%</span>
+                    <span className={`${theme.colors.text} text-sm font-bold`}>{systemStats.cpu}%</span>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -230,25 +296,43 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
                 </div>
               </div>
 
-              {/* Theme Toggle */}
+              {/* Theme Toggle - Enhanced */}
               <motion.button
                 onClick={theme.toggleTheme}
-                className={`w-full p-2 rounded transition-colors ${theme.colors.surfaceHover} flex items-center justify-between`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className={`w-full p-3 rounded-lg transition-colors ${theme.colors.surfaceHover} flex items-center justify-between hover:bg-yellow-500/10`}
+                whileHover={{ scale: 1.03, y: -1 }}
+                whileTap={{ scale: 0.98 }}
                 title="Toggle Theme"
               >
-                <div className="flex items-center space-x-2">
-                  {theme.isDarkMode ? (
-                    <Sun size={16} className="text-yellow-400" />
-                  ) : (
-                    <Moon size={16} className="text-slate-400" />
-                  )}
-                  <span className={`${theme.colors.text} text-xs`}>Theme</span>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-yellow-500/10 rounded flex items-center justify-center">
+                    {theme.isDarkMode ? (
+                      <Sun size={18} className="text-yellow-400" />
+                    ) : (
+                      <Moon size={18} className="text-slate-400" />
+                    )}
+                  </div>
+                  <div>
+                    <span className={`${theme.colors.text} text-sm font-medium`}>Appearance</span>
+                    <span className={`${theme.colors.textMuted} text-xs block`}>Switch between light and dark mode</span>
+                  </div>
                 </div>
-                <span className={`${theme.colors.text} text-xs`}>
-                  {theme.isDarkMode ? 'Light' : 'Dark'}
-                </span>
+                <div className="flex items-center space-x-2">
+                  <span className={`${theme.colors.text} text-sm font-medium`}>
+                    {theme.isDarkMode ? 'Light Mode' : 'Dark Mode'}
+                  </span>
+                  <motion.div
+                    className="w-10 h-5 bg-slate-600 rounded-full p-0.5 flex items-center"
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <motion.div
+                      className="w-4 h-4 bg-white rounded-full"
+                      layout
+                      transition={{ type: "spring", stiffness: 700, damping: 30 }}
+                      animate={{ x: theme.isDarkMode ? 16 : 0 }}
+                    />
+                  </motion.div>
+                </div>
               </motion.button>
 
               {/* Settings */}
