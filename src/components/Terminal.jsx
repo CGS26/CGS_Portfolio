@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Terminal = () => {
+const Terminal = ({ onExit }) => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([]);
   const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [currentPath, setCurrentPath] = useState('~');
   const [isTyping, setIsTyping] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
 
@@ -46,8 +47,14 @@ const Terminal = () => {
         '  clear         - Clear terminal',
         '  help          - Show this help message',
         '  exit          - Close terminal',
+        '  quit          - Quit terminal (alias for exit)',
+        '  shutdown      - Shutdown terminal with animation',
+        '  reboot        - Reboot terminal (close and reopen)',
         '',
-        '💡 Tip: Use ↑/↓ arrow keys for command history'
+        '💡 Tips:',
+        '   • Use ↑/↓ arrow keys for command history',
+        '   • Press Ctrl+C or Ctrl+D to close terminal',
+        '   • Type "exit", "quit", or "shutdown" to close'
       ]
     },
     whoami: {
@@ -407,7 +414,68 @@ const Terminal = () => {
     },
     exit: {
       description: 'Close terminal',
-      execute: () => ['Terminal session ended. Window will close...']
+      execute: () => {
+        setIsClosing(true);
+        setTimeout(() => {
+          if (onExit) {
+            onExit();
+          }
+        }, 1000); // Give time to show the message
+        return ['Terminal session ended. Window will close...'];
+      }
+    },
+    shutdown: {
+      description: 'Shutdown terminal',
+      execute: () => {
+        setIsClosing(true);
+        setTimeout(() => {
+          if (onExit) {
+            onExit();
+          }
+        }, 2000); // Give more time for shutdown message
+        return [
+          '🔄 Initiating shutdown sequence...',
+          '💾 Saving session data...',
+          '🔒 Closing secure connections...',
+          '⚡ Powering down terminal...',
+          '',
+          'Goodbye! 👋'
+        ];
+      }
+    },
+    quit: {
+      description: 'Quit terminal (alias for exit)',
+      execute: () => {
+        setIsClosing(true);
+        setTimeout(() => {
+          if (onExit) {
+            onExit();
+          }
+        }, 800);
+        return ['Quitting terminal...'];
+      }
+    },
+    reboot: {
+      description: 'Reboot terminal (close and reopen)',
+      execute: () => {
+        setIsClosing(true);
+        setTimeout(() => {
+          if (onExit) {
+            onExit();
+            // Reopen terminal after a short delay
+            setTimeout(() => {
+              // This would need to be handled by the Desktop component
+              // For now, just close and user can reopen manually
+            }, 500);
+          }
+        }, 2000);
+        return [
+          '🔄 Rebooting terminal...',
+          '💾 Saving current session...',
+          '🔄 Restarting system processes...',
+          '⚡ Terminal will restart shortly...'
+        ];
+      }
     }
   };
 
@@ -481,6 +549,24 @@ const Terminal = () => {
   };
 
   const handleKeyDown = (e) => {
+    // Handle Ctrl+C or Ctrl+D to close terminal
+    if ((e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'd')) {
+      e.preventDefault();
+      if (onExit) {
+        setIsClosing(true);
+        const newHistory = [...history];
+        newHistory.push({ 
+          type: 'output', 
+          content: ['', '^C', 'Terminal interrupted. Closing...'] 
+        });
+        setHistory(newHistory);
+        setTimeout(() => {
+          onExit();
+        }, 1000);
+      }
+      return;
+    }
+
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length > 0) {
@@ -504,13 +590,23 @@ const Terminal = () => {
   };
 
   return (
-    <div className="h-full bg-gradient-to-b from-gray-900 to-black text-green-400 font-mono text-sm overflow-hidden flex flex-col relative">
+    <div className={`h-full bg-gradient-to-b from-gray-900 to-black text-green-400 font-mono text-sm overflow-hidden flex flex-col relative transition-all duration-1000 ${isClosing ? 'opacity-50 scale-95' : ''}`}>
       {/* Terminal Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300ff00' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }}></div>
       </div>
+      
+      {/* Closing overlay */}
+      {isClosing && (
+        <div className="absolute inset-0 bg-red-900/20 flex items-center justify-center z-20">
+          <div className="text-red-400 text-center">
+            <div className="animate-spin w-8 h-8 border-2 border-red-400 border-t-transparent rounded-full mx-auto mb-2"></div>
+            <div className="text-sm">Closing terminal...</div>
+          </div>
+        </div>
+      )}
       
       {/* Terminal Header */}
       <div className="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-700 relative z-10">

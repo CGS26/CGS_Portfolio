@@ -106,6 +106,75 @@ code {
   font-family: 'Courier New', monospace;
 }
 
+/* Desktop background effects */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Floating animation for particles */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(120deg); }
+  66% { transform: translateY(5px) rotate(240deg); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Subtle glow effect for desktop icons */
+.desktop-icon-glow {
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 0 transparent);
+}
+
+.desktop-icon-glow:hover {
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+  transform: scale(1.1) translateY(-2px);
+}
+
+/* Animated background patterns */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Taskbar glow effect */
+@keyframes taskbar-glow {
+  0%, 100% { box-shadow: 0 -2px 20px rgba(59, 130, 246, 0.1); }
+  50% { box-shadow: 0 -2px 30px rgba(59, 130, 246, 0.2); }
+}
+
+.taskbar-glow {
+  animation: taskbar-glow 3s ease-in-out infinite;
+}
+
+/* Desktop icon animations */
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+.icon-float {
+  animation: icon-float 3s ease-in-out infinite;
+}
+
+/* Gradient animation */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
 /* Terminal cursor animation */
 @keyframes blink {
   0%, 50% { opacity: 1; }

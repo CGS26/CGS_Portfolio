@@ -85,7 +85,7 @@ const Desktop = () => {
     terminal: { 
       title: 'Terminal - Command Prompt', 
       icon: <TerminalIcon size={16} className="text-green-400" />,
-      component: Terminal,
+      component: (props) => <Terminal {...props} onExit={() => closeWindow('terminal')} />,
       size: { width: 800, height: 600 }
     }
   };
@@ -137,27 +137,149 @@ const Desktop = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
-      {/* Desktop Background */}
-      <div className="fixed inset-0 opacity-30">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-blue-900/30 to-slate-800/50"></div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Desktop Background Layers */}
+      <div className="fixed inset-0">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900"></div>
+        
+        {/* Animated gradient overlay */}
+        <motion.div 
+          className="absolute inset-0"
+          animate={{
+            background: [
+              "linear-gradient(45deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%, rgba(6, 182, 212, 0.1) 100%)",
+              "linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, transparent 50%, rgba(59, 130, 246, 0.1) 100%)",
+              "linear-gradient(225deg, rgba(6, 182, 212, 0.1) 0%, transparent 50%, rgba(147, 51, 234, 0.1) 100%)",
+              "linear-gradient(315deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%, rgba(6, 182, 212, 0.1) 100%)"
+            ]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        {/* Geometric pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpolygon points='50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '100px 100px'
+          }}></div>
+        </div>
+        
+        {/* Tech circuit pattern */}
+        <div className="absolute inset-0 opacity-8">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='tech-pattern' x='0' y='0' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.5' opacity='0.3'%3E%3Cpath d='M10 10h80v80H10z'/%3E%3Cpath d='M20 20h60v60H20z'/%3E%3Ccircle cx='50' cy='50' r='15'/%3E%3Ccircle cx='25' cy='25' r='3'/%3E%3Ccircle cx='75' cy='25' r='3'/%3E%3Ccircle cx='25' cy='75' r='3'/%3E%3Ccircle cx='75' cy='75' r='3'/%3E%3Cline x1='25' y1='25' x2='35' y2='35'/%3E%3Cline x1='75' y1='25' x2='65' y2='35'/%3E%3Cline x1='25' y1='75' x2='35' y2='65'/%3E%3Cline x1='75' y1='75' x2='65' y2='65'/%3E%3Cpath d='M0 50h10M90 50h10M50 0v10M50 90v10'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='400' fill='url(%23tech-pattern)'/%3E%3C/svg%3E")`,
+            backgroundSize: '400px 400px'
+          }}></div>
+        </div>
+        
+        {/* Neural network pattern */}
+        <div className="absolute inset-0 opacity-4">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='300' height='300' viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' opacity='0.2'%3E%3Ccircle cx='50' cy='50' r='2'/%3E%3Ccircle cx='150' cy='80' r='2'/%3E%3Ccircle cx='250' cy='120' r='2'/%3E%3Ccircle cx='80' cy='180' r='2'/%3E%3Ccircle cx='200' cy='220' r='2'/%3E%3Ccircle cx='120' cy='250' r='2'/%3E%3Cline x1='50' y1='50' x2='150' y2='80'/%3E%3Cline x1='150' y1='80' x2='250' y2='120'/%3E%3Cline x1='50' y1='50' x2='80' y2='180'/%3E%3Cline x1='150' y1='80' x2='200' y2='220'/%3E%3Cline x1='80' y1='180' x2='120' y2='250'/%3E%3Cline x1='200' y1='220' x2='120' y2='250'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '300px 300px'
+          }}></div>
+        </div>
+        
+        {/* Floating particles */}
+        <div className="absolute inset-0">
+          {[...Array(15)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-cyan-400 rounded-full"
+              initial={{ 
+                x: Math.random() * window.innerWidth, 
+                y: Math.random() * window.innerHeight,
+                opacity: 0 
+              }}
+              animate={{ 
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                opacity: [0, 1, 0]
+              }}
+              transition={{
+                duration: 8 + Math.random() * 4,
+                repeat: Infinity,
+                delay: Math.random() * 5
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Animated geometric shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`shape-${i}`}
+              className="absolute border border-blue-400/10 rounded-full"
+              style={{
+                width: `${100 + i * 50}px`,
+                height: `${100 + i * 50}px`,
+                left: `${20 + i * 15}%`,
+                top: `${10 + i * 10}%`,
+              }}
+              animate={{
+                rotate: 360,
+                scale: [1, 1.1, 1],
+                opacity: [0.1, 0.3, 0.1]
+              }}
+              transition={{
+                duration: 20 + i * 5,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Subtle grid overlay */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}></div>
+        </div>
+        
+        {/* Radial gradient for depth */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20"></div>
+        
+        {/* Subtle watermark */}
+        <div className="absolute bottom-20 right-8 opacity-20">
+          <motion.div
+            className="text-white/30 font-mono text-xs"
+            animate={{ opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          >
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-4 bg-blue-500/30 rounded-sm"></div>
+              <span>Gaurav OS v2024.12</span>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* Desktop Icons */}
-      {desktopIcons.map((icon) => (
+      {desktopIcons.map((icon, index) => (
         <motion.div
           key={icon.id}
-          className="fixed cursor-pointer group"
+          className="fixed cursor-pointer group desktop-icon-glow"
           style={{ left: icon.position.x, top: icon.position.y }}
-          whileHover={{ scale: 1.1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.5 }}
+          whileHover={{ scale: 1.1, y: -2 }}
           whileTap={{ scale: 0.95 }}
           onDoubleClick={() => openWindow(icon.id)}
         >
-          <div className="flex flex-col items-center p-2 rounded-lg group-hover:bg-white/10 transition-colors">
-            <div className="w-12 h-12 bg-slate-700/80 backdrop-blur-sm rounded-lg flex items-center justify-center mb-2 text-white shadow-lg">
+          <div className="flex flex-col items-center p-3 rounded-xl group-hover:bg-white/10 backdrop-blur-sm transition-all duration-300">
+            <div className="w-14 h-14 bg-gradient-to-br from-slate-700/90 to-slate-800/90 backdrop-blur-sm rounded-xl flex items-center justify-center mb-2 text-white shadow-xl border border-white/10 group-hover:border-white/20 transition-all duration-300">
               {icon.icon}
             </div>
-            <span className="text-white text-xs font-mono text-center max-w-16 leading-tight">
+            <span className="text-white text-xs font-mono text-center max-w-20 leading-tight drop-shadow-lg">
               {icon.title}
             </span>
           </div>
@@ -188,19 +310,19 @@ const Desktop = () => {
       })}
 
       {/* Taskbar */}
-      <div className="fixed bottom-0 left-0 right-0 h-12 bg-slate-800/90 backdrop-blur-md border-t border-slate-600/50 flex items-center justify-between px-4 z-30">
+      <div className="fixed bottom-0 left-0 right-0 h-14 bg-slate-900/95 backdrop-blur-xl border-t border-slate-600/30 flex items-center justify-between px-6 z-30 shadow-2xl">
         <div className="flex items-center space-x-4">
           {/* Start Button */}
           <motion.button
             onClick={() => setIsStartMenuOpen(!isStartMenuOpen)}
-            className="flex items-center space-x-2 px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded transition-colors"
-            whileHover={{ scale: 1.05 }}
+            className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-lg transition-all duration-300 shadow-lg"
+            whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(59, 130, 246, 0.3)" }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-6 h-6 bg-blue-600 rounded-sm flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-7 h-7 bg-white rounded-md flex items-center justify-center text-blue-600 text-sm font-bold shadow-inner">
               GS
             </div>
-            <span className="text-slate-300 text-sm font-mono">Start</span>
+            <span className="text-white text-sm font-mono font-semibold">Start</span>
           </motion.button>
 
           {/* Taskbar Items */}
@@ -211,12 +333,13 @@ const Desktop = () => {
                 <motion.button
                   key={windowId}
                   onClick={() => openWindow(windowId)}
-                  className={`flex items-center space-x-2 px-3 py-1 rounded transition-colors ${
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
                     minimizedWindows[windowId] 
-                      ? 'bg-slate-600 text-slate-400' 
-                      : 'bg-slate-700 text-slate-200'
+                      ? 'bg-slate-700/50 text-slate-400 border border-slate-600/30' 
+                      : 'bg-slate-700/80 text-slate-200 border border-slate-500/30 shadow-md'
                   }`}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(51, 65, 85, 0.9)' }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {config.icon}
                   <span className="text-xs font-mono max-w-24 truncate">
@@ -229,12 +352,21 @@ const Desktop = () => {
         </div>
         
         {/* System Tray */}
-        <div className="flex items-center space-x-4">
-          <div className="text-slate-300 text-sm font-mono">
-            {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        <div className="flex items-center space-x-6">
+          {/* System indicators */}
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-slate-400 text-xs font-mono">Online</span>
           </div>
-          <div className="text-slate-300 text-sm font-mono">
-            {currentTime.toLocaleDateString()}
+          
+          {/* Time and Date */}
+          <div className="flex items-center space-x-4 bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-600/30">
+            <div className="text-slate-200 text-sm font-mono font-semibold">
+              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <div className="text-slate-400 text-sm font-mono">
+              {currentTime.toLocaleDateString([], { month: 'short', day: 'numeric' })}
+            </div>
           </div>
         </div>
       </div>
