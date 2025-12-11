@@ -29,46 +29,40 @@ const Awards = () => {
   ];
 
   return (
-    <section className="py-20 bg-slate-900/50 relative">
-      <div className="container mx-auto px-4">
-        <SectionHeader title="Achievements.exe - Awards & Accolades" />
-        
-        <OSWindow 
-          title="Awards Registry - System Achievements"
-          windowIcon={<Trophy size={16} className="text-yellow-400" />}
-        >
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {awards.map((award, index) => (
-                <motion.div 
-                  key={index} 
-                  className="bg-slate-700/30 p-4 rounded border border-slate-600/30 hover:bg-slate-700/50 transition-all"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-slate-600 p-2 rounded">
-                      {award.icon}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-slate-200 font-mono text-sm font-semibold mb-2">
-                        {award.title}
-                      </h4>
-                      <p className="text-slate-400 font-mono text-xs leading-relaxed">
-                        {award.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </OSWindow>
+    <div className="p-6 h-full bg-slate-900/30 overflow-auto">
+      <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-600/30">
+        <div className="mb-6">
+          <span className="text-yellow-400 font-mono text-lg"># System Achievements</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {awards.map((award, index) => (
+            <motion.div 
+              key={index} 
+              className="bg-slate-700/30 p-4 rounded border border-slate-600/30 hover:bg-slate-700/50 transition-all"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="flex items-start space-x-3">
+                <div className="bg-slate-600 p-2 rounded">
+                  {award.icon}
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-slate-200 font-mono text-sm font-semibold mb-2">
+                    {award.title}
+                  </h4>
+                  <p className="text-slate-400 font-mono text-xs leading-relaxed">
+                    {award.description}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

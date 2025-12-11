@@ -70,135 +70,126 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-slate-900/70 relative">
-      <div className="container mx-auto px-4">
-        <SectionHeader title="Mail Client - Contact.exe" />
+    <div className="p-6 h-full bg-slate-900/30 overflow-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+        {/* Contact Info */}
+        <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-600/30">
+          <div className="mb-4">
+            <span className="text-blue-400 font-mono text-lg"># Contact Information</span>
+          </div>
+          <div className="space-y-4">
+            <ContactInfo 
+              icon={<Phone size={20} className="text-green-400" />} 
+              label="Phone" 
+              value="+91-7337225784" 
+            />
+            <ContactInfo 
+              icon={<Mail size={20} className="text-blue-400" />} 
+              label="Email" 
+              value="gauravsushant267@gmail.com" 
+            />
+            <ContactInfo 
+              icon={<Linkedin size={20} className="text-blue-500" />} 
+              label="LinkedIn" 
+              value="linkedin.com/in/gaurav-sushant-cherukuri" 
+            />
+            <ContactInfo 
+              icon={<MapPin size={20} className="text-red-400" />} 
+              label="Location" 
+              value="Hyderabad, India" 
+            />
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Contact Info Window */}
-          <OSWindow 
-            title="Address Book - Contacts" 
-            windowIcon={<User size={16} className="text-blue-400" />}
-            className="h-fit"
-          >
-            <div className="p-6">
-              <div className="space-y-4">
-                <ContactInfo 
-                  icon={<Phone size={20} className="text-green-400" />} 
-                  label="Phone" 
-                  value="+91-7337225784" 
-                />
-                <ContactInfo 
-                  icon={<Mail size={20} className="text-blue-400" />} 
-                  label="Email" 
-                  value="gauravsushant267@gmail.com" 
-                />
-                <ContactInfo 
-                  icon={<Linkedin size={20} className="text-blue-500" />} 
-                  label="LinkedIn" 
-                  value="linkedin.com/in/gaurav-sushant-cherukuri" 
-                />
-                <ContactInfo 
-                  icon={<MapPin size={20} className="text-red-400" />} 
-                  label="Location" 
-                  value="Hyderabad, India" 
-                />
-              </div>
+        {/* Email Compose */}
+        <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-600/30">
+          <div className="mb-4">
+            <span className="text-purple-400 font-mono text-lg"># Send Message</span>
+          </div>
+          
+          {/* Notification */}
+          {notification.message && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`${
+                notification.type === 'success' 
+                  ? 'bg-green-600/20 border-green-500 text-green-400' 
+                  : 'bg-red-600/20 border-red-500 text-red-400'
+              } border rounded p-3 mb-4 flex justify-between items-center font-mono text-sm`}
+            >
+              <span>{notification.message}</span>
+              <button
+                onClick={handleCloseNotification}
+                className="hover:opacity-70 text-lg"
+              >
+                ×
+              </button>
+            </motion.div>
+          )}
+
+          {/* Email Form */}
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="name" className="block text-sm font-mono text-slate-300 mb-1">From:</label>
+              <input 
+                type="text" 
+                id="name" 
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none" 
+                placeholder="Your Name" 
+                required 
+              />
             </div>
-          </OSWindow>
+            <div>
+              <label htmlFor="email" className="block text-sm font-mono text-slate-300 mb-1">Email:</label>
+              <input 
+                type="email" 
+                id="email" 
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none" 
+                placeholder="your.email@domain.com" 
+                required 
+              />
+            </div>
+            <div>
+              <label htmlFor="message" className="block text-sm font-mono text-slate-300 mb-1">Message:</label>
+              <textarea 
+                id="message" 
+                rows="4" 
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none resize-none" 
+                placeholder="Type your message here..."
+                required
+              ></textarea>
+            </div>
 
-          {/* Email Compose Window */}
-          <OSWindow 
-            title="Compose Message - Mail" 
-            windowIcon={<MessageSquare size={16} className="text-purple-400" />}
-            className="h-fit"
-          >
-            <div className="p-6">
-              {/* Notification */}
-              {notification.message && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`${
-                    notification.type === 'success' 
-                      ? 'bg-green-600/20 border-green-500 text-green-400' 
-                      : 'bg-red-600/20 border-red-500 text-red-400'
-                  } border rounded p-3 mb-4 flex justify-between items-center font-mono text-sm`}
-                >
-                  <span>{notification.message}</span>
-                  <button
-                    onClick={handleCloseNotification}
-                    className="hover:opacity-70 text-lg"
-                  >
-                    ×
-                  </button>
-                </motion.div>
+            <motion.button 
+              type="submit" 
+              disabled={loading}
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-600 text-white px-4 py-2 rounded font-mono text-sm transition duration-300 w-full"
+              whileHover={{ scale: loading ? 1 : 1.02 }}
+              whileTap={{ scale: loading ? 1 : 0.98 }}
+            >
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Sending...</span>
+                </>
+              ) : (
+                <>
+                  <Send size={16} />
+                  <span>Send Message</span>
+                </>
               )}
-
-              {/* Email Form */}
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                <div>
-                  <label htmlFor="name" className="block text-sm font-mono text-slate-300 mb-1">From:</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none" 
-                    placeholder="Your Name" 
-                    required 
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-mono text-slate-300 mb-1">Email:</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none" 
-                    placeholder="your.email@domain.com" 
-                    required 
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-mono text-slate-300 mb-1">Message:</label>
-                  <textarea 
-                    id="message" 
-                    rows="6" 
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-slate-200 font-mono text-sm focus:border-blue-500 focus:outline-none resize-none" 
-                    placeholder="Type your message here..."
-                    required
-                  ></textarea>
-                </div>
-
-                <motion.button 
-                  type="submit" 
-                  disabled={loading}
-                  className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-600 text-white px-4 py-2 rounded font-mono text-sm transition duration-300 w-full"
-                  whileHover={{ scale: loading ? 1 : 1.02 }}
-                  whileTap={{ scale: loading ? 1 : 0.98 }}
-                >
-                  {loading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      <span>Sending...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send size={16} />
-                      <span>Send Message</span>
-                    </>
-                  )}
-                </motion.button>
-              </form>
-            </div>
-          </OSWindow>
+            </motion.button>
+          </form>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

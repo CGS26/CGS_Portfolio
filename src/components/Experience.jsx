@@ -49,57 +49,50 @@ const Experience = () => {
   ];
 
   return (
-    <section id="experience" className="py-20 bg-slate-900/30 relative">
-      <div className="container mx-auto px-4">
-        <SectionHeader title="Experience.log - Work History" />
-        <div className="space-y-8">
-          {experiences.map((exp, index) => (
-            <OSWindow 
-              key={index}
-              title={`${exp.company} - ${exp.title}.exe`}
-              windowIcon={<Briefcase size={16} className="text-orange-400" />}
-              className="w-full"
-            >
-              <div className="p-6">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-200 font-mono">{exp.title}</h3>
-                    <p className="text-blue-400 font-mono text-sm">{exp.company}</p>
-                  </div>
-                  <div className="flex flex-col md:items-end mt-2 md:mt-0">
-                    <div className="flex items-center text-slate-400 font-mono text-sm">
-                      <Calendar size={14} className="mr-1" />
-                      {exp.period}
-                    </div>
-                    <div className="flex items-center text-slate-400 font-mono text-sm">
-                      <MapPin size={14} className="mr-1" />
-                      {exp.location}
-                    </div>
-                  </div>
+    <div className="p-6 h-full bg-slate-900/30 overflow-auto">
+      <div className="space-y-6">
+        {experiences.map((exp, index) => (
+          <div 
+            key={index}
+            className="bg-slate-800/50 rounded-lg p-6 border border-slate-600/30"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+              <div>
+                <h3 className="text-xl font-bold text-slate-200 font-mono">{exp.title}</h3>
+                <p className="text-blue-400 font-mono text-sm">{exp.company}</p>
+              </div>
+              <div className="flex flex-col md:items-end mt-2 md:mt-0">
+                <div className="flex items-center text-slate-400 font-mono text-sm">
+                  <Calendar size={14} className="mr-1" />
+                  {exp.period}
                 </div>
-                
-                <div className="space-y-2">
-                  <span className="text-green-400 font-mono text-sm"># Responsibilities:</span>
-                  {exp.responsibilities.map((responsibility, respIndex) => (
-                    <motion.div 
-                      key={respIndex}
-                      className="flex items-start space-x-2 text-slate-300 font-mono text-sm"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 + respIndex * 0.05 }}
-                    >
-                      <ChevronRight size={14} className="text-blue-400 mt-0.5 flex-shrink-0" />
-                      <span>{responsibility}</span>
-                    </motion.div>
-                  ))}
+                <div className="flex items-center text-slate-400 font-mono text-sm">
+                  <MapPin size={14} className="mr-1" />
+                  {exp.location}
                 </div>
               </div>
-            </OSWindow>
-          ))}
-        </div>
+            </div>
+            
+            <div className="space-y-2">
+              <span className="text-green-400 font-mono text-sm"># Responsibilities:</span>
+              {exp.responsibilities.map((responsibility, respIndex) => (
+                <motion.div 
+                  key={respIndex}
+                  className="flex items-start space-x-2 text-slate-300 font-mono text-sm"
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 + respIndex * 0.05 }}
+                >
+                  <ChevronRight size={14} className="text-blue-400 mt-0.5 flex-shrink-0" />
+                  <span>{responsibility}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 };
 

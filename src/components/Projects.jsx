@@ -176,130 +176,111 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
 
   return (
-    <section id="projects" className="py-20 bg-slate-900/50 relative">
-      <div className="container mx-auto px-4">
-        <SectionHeader title="File Explorer - Projects/" />
-        
-        {/* File Explorer Window */}
-        <OSWindow 
-          title="Projects - File Explorer" 
-          windowIcon={<Folder size={16} className="text-yellow-400" />}
-          className="mb-8"
-        >
-          <div className="p-6">
-            {/* Address Bar */}
-            <div className="bg-slate-700 rounded px-3 py-2 mb-4 font-mono text-sm text-slate-300 border border-slate-600">
-              C:\Users\Gaurav\Documents\Projects\
-            </div>
-            
-            {/* File List */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {projects.map((project, index) => (
-                <motion.div
-                  key={index}
-                  className="flex items-center p-3 hover:bg-slate-700/50 rounded cursor-pointer border border-slate-600/30 transition-all"
-                  whileHover={{ scale: 1.02 }}
-                  onClick={() => setSelectedProject(selectedProject === index ? null : index)}
-                >
-                  <Folder size={20} className="text-blue-400 mr-3" />
-                  <div className="flex-1">
-                    <div className="text-slate-200 font-mono text-sm font-semibold">{project.title}</div>
-                    <div className="text-slate-400 font-mono text-xs">{project.period}</div>
-                  </div>
-                  <div className="flex space-x-2">
-                    {project.github && (
-                      <a href={project.github} target="_blank" rel="noopener noreferrer" 
-                         className="text-slate-400 hover:text-white transition-colors">
-                        <Github size={16} />
-                      </a>
-                    )}
-                    {project.websitelink && (
-                      <a href={project.websitelink} target="_blank" rel="noopener noreferrer"
-                         className="text-slate-400 hover:text-white transition-colors">
-                        <Globe size={16} />
-                      </a>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </OSWindow>
-
-        {/* Project Details Window */}
-        {selectedProject !== null && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <OSWindow 
-              title={`${projects[selectedProject].title} - Properties`}
-              windowIcon={<File size={16} className="text-green-400" />}
-            >
-              <div className="p-6">
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-blue-400 font-mono text-sm">Category: </span>
-                    <span className="text-slate-300 font-mono text-sm">{projects[selectedProject].category}</span>
-                  </div>
-                  <div>
-                    <span className="text-blue-400 font-mono text-sm">Description: </span>
-                    <p className="text-slate-300 font-mono text-sm mt-1">{projects[selectedProject].description}</p>
-                  </div>
-                  <div>
-                    <span className="text-blue-400 font-mono text-sm">Technologies: </span>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {projects[selectedProject].technologies.map((tech, techIndex) => (
-                        <span key={techIndex} className="bg-slate-700 text-slate-300 px-2 py-1 rounded text-xs font-mono">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </OSWindow>
-          </motion.div>
-        )}
-
-        {/* Research Papers Window */}
-        <OSWindow 
-          title="Research Papers - Documents" 
-          windowIcon={<FileText size={16} className="text-purple-400" />}
-        >
-          <div className="p-6">
-            <div className="space-y-4">
-              {researchPapers.map((paper, index) => (
-                <motion.div 
-                  key={index} 
-                  className="flex items-start p-4 bg-slate-700/30 rounded border border-slate-600/30 hover:bg-slate-700/50 transition-all"
-                  whileHover={{ scale: 1.01 }}
-                >
-                  <FileText size={20} className="text-purple-400 mr-3 mt-1" />
-                  <div className="flex-1">
-                    <h4 className="text-slate-200 font-mono text-sm font-semibold mb-2 flex items-center">
-                      {paper.title}
-                      {paper.link && (
-                        <a
-                          href={paper.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="ml-2 text-blue-400 hover:text-blue-300 transition-colors"
-                        >
-                          <ExternalLink size={16} />
-                        </a>
-                      )}
-                    </h4>
-                    <p className="text-slate-400 font-mono text-xs">{paper.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </OSWindow>
+    <div className="p-6 h-full bg-slate-900/30 overflow-auto">
+      {/* Address Bar */}
+      <div className="bg-slate-700 rounded px-3 py-2 mb-6 font-mono text-sm text-slate-300 border border-slate-600">
+        C:\Users\Gaurav\Documents\Projects\
       </div>
-    </section>
+      
+      {/* File List */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {projects.map((project, index) => (
+          <motion.div
+            key={index}
+            className="flex items-center p-3 hover:bg-slate-700/50 rounded cursor-pointer border border-slate-600/30 transition-all bg-slate-800/30"
+            whileHover={{ scale: 1.02 }}
+            onClick={() => setSelectedProject(selectedProject === index ? null : index)}
+          >
+            <Folder size={20} className="text-blue-400 mr-3" />
+            <div className="flex-1">
+              <div className="text-slate-200 font-mono text-sm font-semibold">{project.title}</div>
+              <div className="text-slate-400 font-mono text-xs">{project.period}</div>
+            </div>
+            <div className="flex space-x-2">
+              {project.github && (
+                <a href={project.github} target="_blank" rel="noopener noreferrer" 
+                   className="text-slate-400 hover:text-white transition-colors">
+                  <Github size={16} />
+                </a>
+              )}
+              {project.websitelink && (
+                <a href={project.websitelink} target="_blank" rel="noopener noreferrer"
+                   className="text-slate-400 hover:text-white transition-colors">
+                  <Globe size={16} />
+                </a>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Project Details */}
+      {selectedProject !== null && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 bg-slate-800/50 rounded-lg p-6 border border-slate-600/30"
+        >
+          <div className="mb-4">
+            <span className="text-green-400 font-mono text-lg"># {projects[selectedProject].title}</span>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <span className="text-blue-400 font-mono text-sm">Category: </span>
+              <span className="text-slate-300 font-mono text-sm">{projects[selectedProject].category}</span>
+            </div>
+            <div>
+              <span className="text-blue-400 font-mono text-sm">Description: </span>
+              <p className="text-slate-300 font-mono text-sm mt-1">{projects[selectedProject].description}</p>
+            </div>
+            <div>
+              <span className="text-blue-400 font-mono text-sm">Technologies: </span>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {projects[selectedProject].technologies.map((tech, techIndex) => (
+                  <span key={techIndex} className="bg-slate-700 text-slate-300 px-2 py-1 rounded text-xs font-mono">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Research Papers */}
+      <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-600/30">
+        <div className="mb-4">
+          <span className="text-purple-400 font-mono text-lg"># Research Papers</span>
+        </div>
+        <div className="space-y-4">
+          {researchPapers.map((paper, index) => (
+            <motion.div 
+              key={index} 
+              className="flex items-start p-4 bg-slate-700/30 rounded border border-slate-600/30 hover:bg-slate-700/50 transition-all"
+              whileHover={{ scale: 1.01 }}
+            >
+              <FileText size={20} className="text-purple-400 mr-3 mt-1" />
+              <div className="flex-1">
+                <h4 className="text-slate-200 font-mono text-sm font-semibold mb-2 flex items-center">
+                  {paper.title}
+                  {paper.link && (
+                    <a
+                      href={paper.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-2 text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+                </h4>
+                <p className="text-slate-400 font-mono text-xs">{paper.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
