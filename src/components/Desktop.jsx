@@ -253,28 +253,160 @@ const Desktop = () => {
       onContextMenu={handleContextMenu}
       onClick={closeContextMenu}
     >
-      {/* Desktop Background Layers */}
-      <div className="fixed inset-0">
-        {/* Base gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${theme.colors.background}`}></div>
-        
-        {/* Animated gradient overlay */}
-        <motion.div 
+      {/* Enhanced Desktop Background - More Engaging and Interactive */}
+      <div className="fixed inset-0 overflow-hidden">
+        {/* Dynamic base with subtle animation */}
+        <motion.div
           className="absolute inset-0"
           animate={{
             background: [
-              "linear-gradient(45deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%, rgba(6, 182, 212, 0.1) 100%)",
-              "linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, transparent 50%, rgba(59, 130, 246, 0.1) 100%)",
-              "linear-gradient(225deg, rgba(6, 182, 212, 0.1) 0%, transparent 50%, rgba(147, 51, 234, 0.1) 100%)",
-              "linear-gradient(315deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%, rgba(6, 182, 212, 0.1) 100%)"
+              "radial-gradient(circle at 20% 30%, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 70%)",
+              "radial-gradient(circle at 80% 70%, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 70%)",
+              "radial-gradient(circle at 50% 50%, rgba(20, 30, 48, 0.85) 0%, rgba(10, 15, 25, 0.95) 70%)"
             ]
           }}
           transition={{
-            duration: 10,
+            duration: 15,
             repeat: Infinity,
             ease: "linear"
           }}
         />
+
+        {/* Interactive particle network - creates curiosity */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => {
+            const size = 2 + Math.random() * 3;
+            const speed = 5 + Math.random() * 10;
+            const delay = Math.random() * 5;
+            return (
+              <motion.div
+                key={`particle-${i}`}
+                className="absolute bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full"
+                style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  boxShadow: `0 0 ${size * 2}px ${size}px rgba(56, 189, 248, 0.2)`
+                }}
+                animate={{
+                  x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
+                  y: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
+                  opacity: [0.3, 0.8, 0.3],
+                  scale: [0.8, 1.2, 0.8]
+                }}
+                transition={{
+                  duration: speed,
+                  repeat: Infinity,
+                  delay: delay,
+                  ease: "easeInOut"
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Animated connecting lines - creates tech feel */}
+        <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
+          {[...Array(10)].map((_, i) => {
+            const x1 = `${Math.random() * 100}%`;
+            const y1 = `${Math.random() * 100}%`;
+            const x2 = `${Math.random() * 100}%`;
+            const y2 = `${Math.random() * 100}%`;
+            const strokeWidth = 0.5 + Math.random() * 1.5;
+            const opacity = 0.1 + Math.random() * 0.2;
+            return (
+              <motion.line
+                key={`line-${i}`}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke={`rgba(56, 189, 248, ${opacity})`}
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: [0, 0.8, 0.2, 0.8] }}
+                transition={{
+                  duration: 8 + Math.random() * 4,
+                  repeat: Infinity,
+                  delay: Math.random() * 3,
+                  ease: "easeInOut"
+                }}
+              />
+            );
+          })}
+        </svg>
+
+        {/* Pulsing radial gradients - adds depth */}
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={`radial-${i}`}
+            className="absolute rounded-full bg-gradient-to-r from-transparent via-blue-500/5 to-transparent"
+            style={{
+              width: `${200 + i * 100}px`,
+              height: `${200 + i * 100}px`,
+              left: `${Math.random() * 60 + 20}%`,
+              top: `${Math.random() * 60 + 20}%`,
+              opacity: 0.1
+            }}
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 360],
+              opacity: [0.1, 0.2, 0.1]
+            }}
+            transition={{
+              duration: 15 + i * 5,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        ))}
+
+        {/* Subtle tech circuit pattern overlay */}
+        <div className="absolute inset-0 opacity-15">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.5' opacity='0.3'%3E%3Cpath d='M20 20h40v40H20z'/%3E%3Cpath d='M60 60h40v40H60z'/%3E%3Cpath d='M100 100h40v40h-40z'/%3E%3Cpath d='M140 140h40v40h-40z'/%3E%3Cpath d='M20 100h40v40H20z'/%3E%3Cpath d='M100 20h40v40h-40z'/%3E%3Cpath d='M20 180h40v-40H20z'/%3E%3Cpath d='M180 20h-40v40h40z'/%3E%3Cpath d='M180 180h-40v-40h40z'/%3E%3Cpath d='M60 140h40v40H60z'/%3E%3Cpath d='M140 60h40v40h-40z'/%3E%3Cpath d='M140 100h40v40h-40z'/%3E%3Cpath d='M60 100h40v40H60z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '200px 200px'
+          }}></div>
+        </div>
+
+        {/* Floating tech elements - interactive feel */}
+        <div className="absolute inset-0">
+          {[...Array(5)].map((_, i) => {
+            const size = 15 + Math.random() * 20;
+            const icon = ['▲', '●', '■', '▼', '◆'][i % 5];
+            return (
+              <motion.div
+                key={`tech-${i}`}
+                className="absolute text-cyan-400/20 font-bold flex items-center justify-center"
+                style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  left: `${Math.random() * 80 + 10}%`,
+                  top: `${Math.random() * 80 + 10}%`,
+                  fontSize: `${size * 0.6}px`
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [0.2, 0.4, 0.2],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2
+                }}
+                whileHover={{
+                  scale: 1.5,
+                  textShadow: "0 0 10px rgba(56, 189, 248, 0.5)"
+                }}
+              >
+                {icon}
+              </motion.div>
+            );
+          })}
+        </div>
         
         {/* Geometric pattern */}
         <div className="absolute inset-0 opacity-10">
