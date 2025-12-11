@@ -25,6 +25,7 @@ const StartMenu = ({ isOpen, onClose, onOpenWindow }) => {
     { id: 'awards', title: 'Awards', icon: <Award size={20} />, description: 'Achievements and recognition' },
     { id: 'contact', title: 'Contact', icon: <Mail size={20} />, description: 'Get in touch with me' },
     { id: 'terminal', title: 'Terminal', icon: <Terminal size={20} />, description: 'Command line interface' },
+    { id: 'settings', title: 'Settings', icon: <Settings size={20} />, description: 'System configuration and preferences' },
   ];
 
   const filteredItems = menuItems.filter(item =>
