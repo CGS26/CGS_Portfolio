@@ -92,24 +92,6 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
     <div className="relative">
       {/* Windows-like Taskbar - only time visible */}
       <div className="flex items-center space-x-2">
-        {/* Notification Icon - Windows style */}
-        <motion.button
-          onClick={() => setIsSidebarOpen(true)}
-          className={`relative p-1.5 rounded transition-colors ${theme.colors.surfaceHover}`}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          title="Notifications"
-        >
-          <Bell size={14} className={theme.colors.textSecondary} />
-          {notifications.length > 0 && (
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-bold">
-                {notifications.length > 9 ? '9+' : notifications.length}
-              </span>
-            </div>
-          )}
-        </motion.button>
-
         {/* Time and Date - Windows style */}
         <div className={`flex items-center ${theme.colors.surface} px-3 py-1 rounded-lg ${theme.colors.border} border`}>
           <div className={`${theme.colors.text} text-sm font-bold font-mono`}>
@@ -117,19 +99,15 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
           </div>
         </div>
 
-        {/* Sidebar toggle button */}
+        {/* Sidebar toggle button - changed to meaningful Settings icon */}
         <motion.button
           onClick={toggleSidebar}
           className={`p-1.5 rounded transition-colors ${theme.colors.surfaceHover}`}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          title="Show hidden icons"
+          title="Show hidden system icons"
         >
-          {isSidebarOpen ? (
-            <ChevronLeft size={14} className={theme.colors.textSecondary} />
-          ) : (
-            <ChevronRight size={14} className={theme.colors.textSecondary} />
-          )}
+          <Settings size={14} className={theme.colors.textSecondary} />
         </motion.button>
       </div>
 
