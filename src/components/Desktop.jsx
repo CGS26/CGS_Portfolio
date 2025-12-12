@@ -47,6 +47,16 @@ const Desktop = () => {
     }
   ]);
   const [snapPreview, setSnapPreview] = useState(null);
+  const [desktopIcons, setDesktopIcons] = useState([
+    { id: 'about', title: 'About.exe', icon: <User size={24} />, position: { x: 50, y: 100 } },
+    { id: 'skills', title: 'Skills.exe', icon: <Code size={24} />, position: { x: 50, y: 200 } },
+    { id: 'experience', title: 'Work.exe', icon: <Briefcase size={24} />, position: { x: 50, y: 300 } },
+    { id: 'projects', title: 'Projects', icon: <Folder size={24} />, position: { x: 150, y: 100 } },
+    { id: 'awards', title: 'Awards.exe', icon: <Award size={24} />, position: { x: 150, y: 200 } },
+    { id: 'contact', title: 'Mail.exe', icon: <Mail size={24} />, position: { x: 150, y: 300 } },
+    { id: 'terminal', title: 'Terminal', icon: <TerminalIcon size={24} />, position: { x: 250, y: 100 } },
+    { id: 'settings', title: 'Settings', icon: <SettingsIcon size={24} />, position: { x: 250, y: 200 } },
+  ]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -120,16 +130,6 @@ const Desktop = () => {
     setNotifications([]);
   };
 
-  const desktopIcons = [
-    { id: 'about', title: 'About.exe', icon: <User size={24} />, position: { x: 50, y: 100 } },
-    { id: 'skills', title: 'Skills.exe', icon: <Code size={24} />, position: { x: 50, y: 200 } },
-    { id: 'experience', title: 'Work.exe', icon: <Briefcase size={24} />, position: { x: 50, y: 300 } },
-    { id: 'projects', title: 'Projects', icon: <Folder size={24} />, position: { x: 150, y: 100 } },
-    { id: 'awards', title: 'Awards.exe', icon: <Award size={24} />, position: { x: 150, y: 200 } },
-    { id: 'contact', title: 'Mail.exe', icon: <Mail size={24} />, position: { x: 150, y: 300 } },
-    { id: 'terminal', title: 'Terminal', icon: <TerminalIcon size={24} />, position: { x: 250, y: 100 } },
-    { id: 'settings', title: 'Settings', icon: <SettingsIcon size={24} />, position: { x: 250, y: 200 } },
-  ];
 
   const windowConfigs = {
     about: { 
@@ -248,13 +248,49 @@ const Desktop = () => {
 
 
   return (
-    <div 
+    <div
       className="min-h-screen relative overflow-hidden"
       onContextMenu={handleContextMenu}
       onClick={closeContextMenu}
     >
-      {/* Enhanced Desktop Background - More Engaging and Interactive */}
+      {/* Mobile Detection and Responsive Adjustments */}
+      <div className="fixed inset-0 pointer-events-none z-50">
+        <motion.div
+          className="absolute top-4 left-4 text-xs text-white/30 font-mono"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.5 }}
+          transition={{ delay: 1 }}
+        >
+          {typeof window !== 'undefined' && window.innerWidth < 768 ? '📱 Mobile Mode' : '💻 Desktop Mode'}
+        </motion.div>
+      </div>
+      {/* Enhanced Desktop Background - More Engaging, Interactive and Responsive */}
       <div className="fixed inset-0 overflow-hidden">
+        {/* Exciting Particle Explosion Effect */}
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={`explosion-${i}`}
+            className="absolute rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+            style={{
+              width: `${50 + Math.random() * 100}px`,
+              height: `${50 + Math.random() * 100}px`,
+              left: `${Math.random() * 80 + 10}%`,
+              top: `${Math.random() * 80 + 10}%`,
+              opacity: 0.1,
+              filter: 'blur(20px)'
+            }}
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.1, 0.2, 0.1],
+              rotate: [0, 360]
+            }}
+            transition={{
+              duration: 8 + Math.random() * 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
         {/* Dynamic base with subtle animation */}
         <motion.div
           className="absolute inset-0"
@@ -494,6 +530,35 @@ const Desktop = () => {
         {/* Radial gradient for depth */}
         <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20"></div>
 
+        {/* Exciting Floating Tech Bubbles */}
+        {[...Array(8)].map((_, i) => {
+          const size = 20 + Math.random() * 40;
+          const delay = Math.random() * 3;
+          return (
+            <motion.div
+              key={`bubble-${i}`}
+              className="absolute rounded-full bg-gradient-to-br from-cyan-400/20 to-blue-500/20 border border-cyan-400/10"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                left: `${Math.random() * 80 + 10}%`,
+                bottom: `-${size}px`,
+              }}
+              animate={{
+                y: [`${window.innerHeight + size}px`, `-${size * 2}px`],
+                opacity: [0, 0.3, 0],
+                scale: [0.8, 1.2, 0.8]
+              }}
+              transition={{
+                duration: 10 + Math.random() * 5,
+                delay: delay,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          );
+        })}
+
         {/* Welcome Message - Portfolio Branding */}
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-0 pointer-events-none">
           <motion.div
@@ -538,7 +603,7 @@ const Desktop = () => {
         </div>
       </div>
 
-      {/* Desktop Icons - Enhanced with Draggable Functionality */}
+      {/* Desktop Icons - Enhanced with Draggable Functionality and Responsive Design */}
       {desktopIcons.map((icon, index) => (
         <motion.div
           key={icon.id}
@@ -550,23 +615,24 @@ const Desktop = () => {
           whileHover={{
             scale: 1.15,
             y: -5,
-            transition: { type: "spring", stiffness: 300 }
+            transition: { type: "spring", stiffness: 300 },
+            boxShadow: "0 0 20px rgba(56, 189, 248, 0.5)"
           }}
           whileTap={{ scale: 0.9 }}
-          whileDrag={{ scale: 1.2, rotate: 2 }}
+          whileDrag={{ scale: 1.2, rotate: 2, boxShadow: "0 0 30px rgba(56, 189, 248, 0.7)" }}
           drag
           dragConstraints={{ left: 0, right: window.innerWidth - 80, top: 0, bottom: window.innerHeight - 120 }}
           dragElastic={0.1}
           dragTransition={{ bounceStiffness: 500, bounceDamping: 20 }}
           onDragEnd={(event, info) => {
-            // Update icon position
-            const newIcons = desktopIcons.map(i =>
-              i.id === icon.id
-                ? { ...i, position: { x: info.point.x, y: info.point.y } }
-                : i
+            // Update icon position in state
+            setDesktopIcons(prevIcons =>
+              prevIcons.map(i =>
+                i.id === icon.id
+                  ? { ...i, position: { x: info.point.x, y: info.point.y } }
+                  : i
+              )
             );
-            // This would normally update state, but since we're using static data,
-            // the icons will reset on refresh. For a real app, you'd save positions.
           }}
           onDoubleClick={() => {
             // Add bounce animation on double click

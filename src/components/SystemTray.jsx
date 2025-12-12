@@ -126,11 +126,20 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
         </motion.button>
       </div>
 
-      {/* Windows-like Sidebar - Enhanced UI */}
+      {/* Windows-like Sidebar - Enhanced UI with Advanced Responsive Design */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
-            className={`absolute right-4 bottom-14 w-72 ${theme.colors.surface} backdrop-blur-xl rounded-xl shadow-2xl border ${theme.colors.border} z-50 overflow-hidden`}
+            className={`fixed inset-0 bg-black/50 z-40 md:hidden`} // Mobile backdrop
+            onClick={toggleSidebar}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+        )}
+        {isSidebarOpen && (
+          <motion.div
+            className={`fixed right-0 bottom-0 w-full h-full md:absolute md:right-2 md:bottom-12 md:w-full md:max-w-sm md:h-auto ${theme.colors.surface} backdrop-blur-xl rounded-xl shadow-2xl border ${theme.colors.border} z-50 overflow-y-auto md:overflow-hidden`}
             initial={{ opacity: 0, x: 30, scale: 0.9 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 30, scale: 0.9 }}
@@ -145,23 +154,23 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
                       <path d="M1 6H11M6 1V11" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                     </svg>
                   </div>
-                  <h3 className={`${theme.colors.text} font-semibold text-sm`}>System Tray</h3>
+                  <h3 className={`${theme.colors.text} font-semibold text-sm md:text-base`}>System Tray</h3>
                 </div>
                 <motion.button
                   onClick={toggleSidebar}
-                  className={`p-1 rounded ${theme.colors.surfaceHover}`}
+                  className={`p-1 rounded ${theme.colors.surfaceHover} md:hidden`}
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <X size={14} className={theme.colors.textSecondary} />
+                  <X size={18} className={theme.colors.textSecondary} />
                 </motion.button>
               </div>
             </div>
 
-            {/* Sidebar Content */}
-            <div className="p-3 space-y-3">
-              {/* System Icons - Enhanced Windows-like grid */}
-              <div className="grid grid-cols-2 gap-3">
+            {/* Sidebar Content with Responsive Adjustments */}
+            <div className="p-3 space-y-3 h-full overflow-y-auto">
+              {/* System Icons - Enhanced Windows-like grid with Responsive Design */}
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-3">
                 {/* WiFi - Enhanced */}
                 <motion.div
                   className={`p-3 rounded-lg cursor-pointer transition-colors ${theme.colors.surfaceHover} flex items-center space-x-3 hover:bg-blue-500/10`}
@@ -296,42 +305,32 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
                 </div>
               </div>
 
-              {/* Theme Toggle - Enhanced */}
+              {/* Theme Toggle - Simplified */}
               <motion.button
                 onClick={theme.toggleTheme}
-                className={`w-full p-3 rounded-lg transition-colors ${theme.colors.surfaceHover} flex items-center justify-between hover:bg-yellow-500/10`}
-                whileHover={{ scale: 1.03, y: -1 }}
+                className={`w-full p-3 rounded-lg transition-colors ${theme.colors.surfaceHover} flex items-center justify-center hover:bg-yellow-500/10`}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 title="Toggle Theme"
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 bg-yellow-500/10 rounded flex items-center justify-center">
-                    {theme.isDarkMode ? (
-                      <Sun size={18} className="text-yellow-400" />
-                    ) : (
-                      <Moon size={18} className="text-slate-400" />
-                    )}
+                    <Sun size={18} className="text-yellow-400" />
                   </div>
-                  <div>
-                    <span className={`${theme.colors.text} text-sm font-medium`}>Appearance</span>
-                    <span className={`${theme.colors.textMuted} text-xs block`}>Switch between light and dark mode</span>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className={`${theme.colors.text} text-sm font-medium`}>
-                    {theme.isDarkMode ? 'Light Mode' : 'Dark Mode'}
-                  </span>
                   <motion.div
-                    className="w-10 h-5 bg-slate-600 rounded-full p-0.5 flex items-center"
+                    className="w-12 h-6 bg-slate-600 rounded-full p-0.5 flex items-center"
                     whileTap={{ scale: 0.9 }}
                   >
                     <motion.div
-                      className="w-4 h-4 bg-white rounded-full"
+                      className="w-5 h-5 bg-white rounded-full"
                       layout
                       transition={{ type: "spring", stiffness: 700, damping: 30 }}
-                      animate={{ x: theme.isDarkMode ? 16 : 0 }}
+                      animate={{ x: theme.isDarkMode ? 20 : 0 }}
                     />
                   </motion.div>
+                  <div className="w-8 h-8 bg-slate-600/10 rounded flex items-center justify-center">
+                    <Moon size={18} className="text-slate-400" />
+                  </div>
                 </div>
               </motion.button>
 
@@ -367,7 +366,7 @@ const WindowsSidebar = ({ currentTime, notifications, onDismissNotification, onC
                     <p className="text-xs">No notifications</p>
                   </div>
                 ) : (
-                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                  <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                     {notifications.slice(0, 3).map((notification) => (
                       <motion.div
                         key={notification.id}
