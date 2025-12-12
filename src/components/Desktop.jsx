@@ -47,16 +47,52 @@ const Desktop = () => {
     }
   ]);
   const [snapPreview, setSnapPreview] = useState(null);
+  const [storyMode, setStoryMode] = useState(false);
+  const [storyStep, setStoryStep] = useState(0);
+  const [storyNarrator, setStoryNarrator] = useState(null);
   const [desktopIcons, setDesktopIcons] = useState([
-    { id: 'about', title: 'About.exe', icon: <User size={24} />, position: { x: 50, y: 100 } },
-    { id: 'skills', title: 'Skills.exe', icon: <Code size={24} />, position: { x: 50, y: 200 } },
-    { id: 'experience', title: 'Work.exe', icon: <Briefcase size={24} />, position: { x: 50, y: 300 } },
-    { id: 'projects', title: 'Projects', icon: <Folder size={24} />, position: { x: 150, y: 100 } },
-    { id: 'awards', title: 'Awards.exe', icon: <Award size={24} />, position: { x: 150, y: 200 } },
-    { id: 'contact', title: 'Mail.exe', icon: <Mail size={24} />, position: { x: 150, y: 300 } },
-    { id: 'terminal', title: 'Terminal', icon: <TerminalIcon size={24} />, position: { x: 250, y: 100 } },
-    { id: 'settings', title: 'Settings', icon: <SettingsIcon size={24} />, position: { x: 250, y: 200 } },
+    { id: 'about', title: 'About.exe', icon: <User size={24} />, position: { x: 50, y: 100 }, mobilePosition: { x: 20, y: 120 } },
+    { id: 'skills', title: 'Skills.exe', icon: <Code size={24} />, position: { x: 50, y: 200 }, mobilePosition: { x: 120, y: 120 } },
+    { id: 'experience', title: 'Work.exe', icon: <Briefcase size={24} />, position: { x: 50, y: 300 }, mobilePosition: { x: 220, y: 120 } },
+    { id: 'projects', title: 'Projects', icon: <Folder size={24} />, position: { x: 150, y: 100 }, mobilePosition: { x: 20, y: 220 } },
+    { id: 'awards', title: 'Awards.exe', icon: <Award size={24} />, position: { x: 150, y: 200 }, mobilePosition: { x: 120, y: 220 } },
+    { id: 'contact', title: 'Mail.exe', icon: <Mail size={24} />, position: { x: 150, y: 300 }, mobilePosition: { x: 220, y: 220 } },
+    { id: 'terminal', title: 'Terminal', icon: <TerminalIcon size={24} />, position: { x: 250, y: 100 }, mobilePosition: { x: 20, y: 320 } },
+    { id: 'settings', title: 'Settings', icon: <SettingsIcon size={24} />, position: { x: 250, y: 200 }, mobilePosition: { x: 120, y: 320 } },
   ]);
+
+  const storySequence = [
+    {
+      window: 'about',
+      narrator: "Welcome to my digital workspace. Let me introduce myself - I'm Gaurav, a passionate Software Engineer and Data Scientist on a mission to create innovative solutions.",
+      delay: 2000
+    },
+    {
+      window: 'skills',
+      narrator: "My journey began with mastering the fundamentals. Here are the technical skills I've honed through years of dedication and continuous learning.",
+      delay: 3000
+    },
+    {
+      window: 'experience',
+      narrator: "Every great developer starts somewhere. Let me walk you through my professional journey - from internships to impactful projects that shaped my career.",
+      delay: 4000
+    },
+    {
+      window: 'projects',
+      narrator: "Innovation happens in the doing. These are the projects where I've turned ideas into reality, solving real-world problems with technology.",
+      delay: 5000
+    },
+    {
+      window: 'awards',
+      narrator: "Recognition validates the path. These achievements represent milestones in my journey of growth and excellence.",
+      delay: 3000
+    },
+    {
+      window: 'contact',
+      narrator: "Stories are meant to connect. If my journey resonates with you, I'd love to hear from you. Let's build something amazing together.",
+      delay: 3000
+    }
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -64,6 +100,38 @@ const Desktop = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Story mode functionality
+  const startStory = () => {
+    setStoryMode(true);
+    setStoryStep(0);
+    setStoryNarrator(storySequence[0].narrator);
+    openWindow(storySequence[0].window);
+  };
+
+  const nextStoryStep = () => {
+    if (storyStep < storySequence.length - 1) {
+      const nextStep = storyStep + 1;
+      setStoryStep(nextStep);
+      setStoryNarrator(storySequence[nextStep].narrator);
+      setTimeout(() => {
+        openWindow(storySequence[nextStep].window);
+      }, 500);
+    } else {
+      setStoryMode(false);
+      setStoryNarrator(null);
+      addNotification({
+        type: 'success',
+        title: 'Story Complete',
+        message: 'Thanks for exploring my portfolio journey!'
+      });
+    }
+  };
+
+  const skipStory = () => {
+    setStoryMode(false);
+    setStoryNarrator(null);
+  };
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -191,20 +259,27 @@ const Desktop = () => {
         ...prev,
         [windowId]: {
           zIndex: newZIndex,
-          position: { 
-            x: 100 + Object.keys(prev).length * 30, 
-            y: 100 + Object.keys(prev).length * 30 
+          position: {
+            x: 100 + Object.keys(prev).length * 30,
+            y: 100 + Object.keys(prev).length * 30
           }
         }
       }));
       setMinimizedWindows(prev => ({ ...prev, [windowId]: false }));
-      
+
       // Add notification for window opening
       addNotification({
         type: 'info',
         title: 'Application Opened',
         message: `${windowConfigs[windowId].title} is now running`
       });
+
+      // Auto-progress story if in story mode
+      if (storyMode && windowId === storySequence[storyStep]?.window) {
+        setTimeout(() => {
+          nextStoryStep();
+        }, storySequence[storyStep]?.delay || 3000);
+      }
     } else {
       // Bring to front
       const newZIndex = windowZIndex + 1;
@@ -263,73 +338,104 @@ const Desktop = () => {
         >
           {typeof window !== 'undefined' && window.innerWidth < 768 ? '📱 Mobile Mode' : '💻 Desktop Mode'}
         </motion.div>
+        {/* Mobile-specific controls */}
+        {typeof window !== 'undefined' && window.innerWidth < 768 && (
+          <motion.div
+            className="absolute top-4 right-4 flex space-x-2 pointer-events-auto"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5 }}
+          >
+            <button
+              onClick={startStory}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-mono text-xs font-semibold shadow-lg transition-colors"
+            >
+              📖 Story
+            </button>
+            <button
+              onClick={() => setIsStartMenuOpen(!isStartMenuOpen)}
+              className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg font-mono text-xs font-semibold shadow-lg transition-colors"
+            >
+              ☰ Menu
+            </button>
+          </motion.div>
+        )}
       </div>
       {/* Enhanced Desktop Background - More Engaging, Interactive and Responsive */}
       <div className="fixed inset-0 overflow-hidden">
-        {/* Exciting Particle Explosion Effect */}
-        {[...Array(3)].map((_, i) => (
+        {/* Enhanced Particle Explosion Effects */}
+        {[...Array(5)].map((_, i) => (
           <motion.div
             key={`explosion-${i}`}
-            className="absolute rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+            className="absolute rounded-full bg-gradient-to-r from-blue-500 via-purple-600 to-cyan-500"
             style={{
-              width: `${50 + Math.random() * 100}px`,
-              height: `${50 + Math.random() * 100}px`,
-              left: `${Math.random() * 80 + 10}%`,
-              top: `${Math.random() * 80 + 10}%`,
-              opacity: 0.1,
-              filter: 'blur(20px)'
+              width: `${30 + Math.random() * 80}px`,
+              height: `${30 + Math.random() * 80}px`,
+              left: `${Math.random() * 90}%`,
+              top: `${Math.random() * 90}%`,
+              opacity: 0.08,
+              filter: 'blur(15px)'
             }}
             animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.1, 0.2, 0.1],
-              rotate: [0, 360]
+              scale: [1, 2, 1],
+              opacity: [0.05, 0.15, 0.05],
+              rotate: [0, 180, 360],
+              x: [0, Math.random() * 100 - 50, 0],
+              y: [0, Math.random() * 100 - 50, 0]
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
+              duration: 12 + Math.random() * 8,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
+              delay: Math.random() * 5
             }}
           />
         ))}
-        {/* Dynamic base with subtle animation */}
+        {/* Enhanced Dynamic Background with Rich Colors */}
         <motion.div
           className="absolute inset-0"
+          initial={{
+            background: "radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(10, 15, 25, 1) 100%)"
+          }}
           animate={{
             background: [
-              "radial-gradient(circle at 20% 30%, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 70%)",
-              "radial-gradient(circle at 80% 70%, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 70%)",
-              "radial-gradient(circle at 50% 50%, rgba(20, 30, 48, 0.85) 0%, rgba(10, 15, 25, 0.95) 70%)"
+              "radial-gradient(circle at 20% 30%, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(20, 30, 48, 0.95) 100%)",
+              "radial-gradient(circle at 80% 70%, rgba(20, 30, 48, 0.9) 0%, rgba(30, 41, 59, 0.85) 50%, rgba(15, 23, 42, 0.95) 100%)",
+              "radial-gradient(circle at 50% 20%, rgba(25, 35, 52, 0.88) 0%, rgba(20, 30, 48, 0.92) 50%, rgba(30, 41, 59, 0.96) 100%)",
+              "radial-gradient(circle at 30% 80%, rgba(15, 23, 42, 0.9) 0%, rgba(25, 35, 52, 0.88) 50%, rgba(20, 30, 48, 0.95) 100%)"
             ]
           }}
           transition={{
-            duration: 15,
+            duration: 20,
             repeat: Infinity,
-            ease: "linear"
+            ease: "easeInOut"
           }}
         />
 
-        {/* Interactive particle network - creates curiosity */}
+        {/* Enhanced Interactive Particle Network */}
         <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => {
-            const size = 2 + Math.random() * 3;
-            const speed = 5 + Math.random() * 10;
-            const delay = Math.random() * 5;
+          {[...Array(25)].map((_, i) => {
+            const size = 1.5 + Math.random() * 4;
+            const speed = 8 + Math.random() * 15;
+            const delay = Math.random() * 8;
+            const colors = ['from-cyan-400 to-blue-500', 'from-purple-400 to-pink-500', 'from-blue-400 to-cyan-500', 'from-green-400 to-blue-500'];
+            const colorClass = colors[i % colors.length];
             return (
               <motion.div
                 key={`particle-${i}`}
-                className="absolute bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full"
+                className={`absolute bg-gradient-to-br ${colorClass} rounded-full`}
                 style={{
                   width: `${size}px`,
                   height: `${size}px`,
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  boxShadow: `0 0 ${size * 2}px ${size}px rgba(56, 189, 248, 0.2)`
+                  boxShadow: `0 0 ${size * 3}px ${size}px rgba(56, 189, 248, 0.3)`
                 }}
                 animate={{
-                  x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
-                  y: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
-                  opacity: [0.3, 0.8, 0.3],
-                  scale: [0.8, 1.2, 0.8]
+                  x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
+                  y: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
+                  opacity: [0.2, 0.9, 0.2],
+                  scale: [0.5, 1.5, 0.5]
                 }}
                 transition={{
                   duration: speed,
@@ -559,34 +665,112 @@ const Desktop = () => {
           );
         })}
 
-        {/* Welcome Message - Portfolio Branding */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-0 pointer-events-none">
+        {/* Enhanced Welcome Section with Immediate Appeal */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-0 pointer-events-none max-w-lg">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="mb-6"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+              Gaurav Sushant
+            </h1>
+            <p className="text-xl text-slate-300 font-mono font-semibold">
+              Software Engineer & Data Scientist
+            </p>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 0.8, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="text-white/50 text-lg font-bold mb-2"
+            transition={{ duration: 1, delay: 0.8 }}
+            className="text-slate-400 text-sm font-mono leading-relaxed mb-6 max-w-md mx-auto"
           >
-            <span className="text-blue-400">Welcome to</span>
-            <span className="text-white ml-2">CGS OS</span>
+            Crafting innovative solutions through code, data, and creativity.
+            Explore my journey in technology and innovation.
           </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 0.6, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="text-white/40 text-sm font-mono"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center pointer-events-auto"
           >
-            Gaurav Sushant's Portfolio Desktop
+            <button
+              onClick={() => openWindow('about')}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2"
+            >
+              <User size={18} />
+              <span>About Me</span>
+            </button>
+            <button
+              onClick={startStory}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2"
+            >
+              <span className="text-lg">📖</span>
+              <span>My Story</span>
+            </button>
           </motion.div>
+
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.3, scale: 1 }}
-            transition={{ duration: 1.5, delay: 1, repeat: Infinity, repeatType: "reverse" }}
-            className="mt-4 text-blue-400/30 text-xs font-mono"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            transition={{ duration: 1, delay: 1.8 }}
+            className="mt-8 text-slate-500 text-xs font-mono"
           >
-            💻 Double-click icons to explore
+            💡 Double-click desktop icons to explore • Scroll to discover more
           </motion.div>
         </div>
+
+        {/* Story Narrator */}
+        {storyNarrator && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-40 max-w-2xl"
+          >
+            <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-600/50 rounded-xl p-6 shadow-2xl">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-xl">📖</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-slate-200 font-mono text-sm leading-relaxed mb-4">
+                    {storyNarrator}
+                  </p>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={nextStoryStep}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-mono text-sm font-semibold transition-colors"
+                    >
+                      {storyStep < storySequence.length - 1 ? 'Continue →' : 'Finish Story'}
+                    </button>
+                    <button
+                      onClick={skipStory}
+                      className="text-slate-400 hover:text-slate-300 font-mono text-sm transition-colors"
+                    >
+                      Skip Story
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 flex justify-center">
+                <div className="flex space-x-2">
+                  {storySequence.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index <= storyStep ? 'bg-blue-500' : 'bg-slate-600'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Subtle watermark */}
         <div className="absolute bottom-20 right-8 opacity-20">
@@ -603,29 +787,36 @@ const Desktop = () => {
         </div>
       </div>
 
-      {/* Desktop Icons - Enhanced with Draggable Functionality and Responsive Design */}
-      {desktopIcons.map((icon, index) => (
+      {/* Enhanced Desktop Icons with Advanced Interactions */}
+      {desktopIcons.map((icon, index) => {
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        const currentPosition = isMobile ? icon.mobilePosition : icon.position;
+
+        return (
         <motion.div
           key={icon.id}
           className="fixed cursor-pointer group desktop-icon-glow z-10"
-          style={{ left: icon.position.x, top: icon.position.y }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.5, type: "spring", stiffness: 200 }}
+          style={{ left: currentPosition.x, top: currentPosition.y }}
+          initial={{ opacity: 0, y: 20, scale: 0.8 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: index * 0.1, duration: 0.6, type: "spring", stiffness: 200 }}
           whileHover={{
-            scale: 1.15,
-            y: -5,
-            transition: { type: "spring", stiffness: 300 },
-            boxShadow: "0 0 20px rgba(56, 189, 248, 0.5)"
+            scale: 1.2,
+            y: -8,
+            transition: { type: "spring", stiffness: 400, damping: 15 },
+            boxShadow: "0 0 25px rgba(56, 189, 248, 0.6), 0 0 50px rgba(56, 189, 248, 0.3)"
           }}
-          whileTap={{ scale: 0.9 }}
-          whileDrag={{ scale: 1.2, rotate: 2, boxShadow: "0 0 30px rgba(56, 189, 248, 0.7)" }}
+          whileTap={{ scale: 0.85 }}
+          whileDrag={{
+            scale: 1.25,
+            rotate: 5,
+            boxShadow: "0 0 35px rgba(56, 189, 248, 0.8), 0 0 70px rgba(56, 189, 248, 0.4)"
+          }}
           drag
           dragConstraints={{ left: 0, right: window.innerWidth - 80, top: 0, bottom: window.innerHeight - 120 }}
-          dragElastic={0.1}
-          dragTransition={{ bounceStiffness: 500, bounceDamping: 20 }}
+          dragElastic={0.2}
+          dragTransition={{ bounceStiffness: 600, bounceDamping: 25 }}
           onDragEnd={(event, info) => {
-            // Update icon position in state
             setDesktopIcons(prevIcons =>
               prevIcons.map(i =>
                 i.id === icon.id
@@ -635,29 +826,49 @@ const Desktop = () => {
             );
           }}
           onDoubleClick={() => {
-            // Add bounce animation on double click
             const iconElement = event.currentTarget;
+            // Enhanced bounce animation
             iconElement.animate([
-              { transform: 'scale(1)' },
-              { transform: 'scale(1.2)' },
-              { transform: 'scale(1)' }
+              { transform: 'scale(1)', filter: 'brightness(1)' },
+              { transform: 'scale(1.3)', filter: 'brightness(1.2)' },
+              { transform: 'scale(0.95)', filter: 'brightness(1.1)' },
+              { transform: 'scale(1)', filter: 'brightness(1)' }
             ], {
-              duration: 300,
-              easing: 'ease-in-out'
+              duration: 400,
+              easing: 'ease-out'
             });
             openWindow(icon.id);
           }}
         >
-          <div className="flex flex-col items-center p-3 rounded-xl group-hover:bg-white/10 backdrop-blur-sm transition-all duration-300">
-            <div className="w-14 h-14 bg-gradient-to-br from-slate-700/90 to-slate-800/90 backdrop-blur-sm rounded-xl flex items-center justify-center mb-2 text-white shadow-xl border border-white/10 group-hover:border-white/20 transition-all duration-300">
-              {icon.icon}
-            </div>
-            <span className="text-white text-xs font-mono text-center max-w-20 leading-tight drop-shadow-lg">
+          <div className="flex flex-col items-center p-4 rounded-2xl group-hover:bg-white/15 backdrop-blur-md transition-all duration-500 border border-transparent group-hover:border-white/20">
+            <motion.div
+              className="w-16 h-16 bg-gradient-to-br from-slate-600/95 to-slate-700/95 backdrop-blur-md rounded-2xl flex items-center justify-center mb-3 text-white shadow-2xl border border-white/10 group-hover:border-white/30 transition-all duration-500 relative overflow-hidden"
+              whileHover={{
+                background: "linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(139, 92, 246, 0.2))"
+              }}
+            >
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                {icon.icon}
+              </motion.div>
+            </motion.div>
+            <span className="text-white text-xs font-mono text-center max-w-24 leading-tight drop-shadow-lg group-hover:text-blue-200 transition-colors duration-300">
               {icon.title}
             </span>
+            {/* Subtle pulse effect */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl border-2 border-blue-400/0 group-hover:border-blue-400/50"
+              animate={{ opacity: [0, 0.5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+            />
           </div>
         </motion.div>
-      ))}
+        );
+      })}
 
       {/* Snap Preview */}
       {snapPreview && (

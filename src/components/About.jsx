@@ -5,9 +5,41 @@ import SectionHeader from './common/SectionHeader';
 import OSWindow from './common/OSWindow';
 
 const About = () => {
+  const stats = [
+    { label: "Years Experience", value: "3+", icon: "🚀" },
+    { label: "Projects Completed", value: "15+", icon: "💼" },
+    { label: "Technologies Mastered", value: "20+", icon: "🛠️" },
+    { label: "Research Papers", value: "3", icon: "📚" },
+    { label: "Certifications", value: "5+", icon: "🏆" },
+    { label: "Lines of Code", value: "50K+", icon: "💻" }
+  ];
+
   return (
-    <div className="p-6 h-full bg-slate-900/30">
-      <div className="grid md:grid-cols-2 gap-6 h-full">
+    <div className="p-6 h-full bg-slate-900/30 overflow-auto">
+      {/* Achievement Stats */}
+      <div className="mb-6 bg-gradient-to-r from-slate-800/60 to-slate-700/60 rounded-lg p-6 border border-slate-600/40">
+        <div className="mb-4">
+          <span className="text-yellow-400 font-mono text-lg"># Career Impact Metrics</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              className="bg-slate-700/50 p-4 rounded-lg border border-slate-600/30 text-center hover:bg-slate-700/70 transition-all duration-300"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="text-2xl mb-2">{stat.icon}</div>
+              <div className="text-xl font-bold text-blue-400 font-mono">{stat.value}</div>
+              <div className="text-xs text-slate-400 font-mono">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
         {/* Profile Section */}
         <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-600/30">
           <div className="mb-4">
@@ -16,7 +48,7 @@ const About = () => {
           <div className="text-slate-300 font-mono text-sm leading-relaxed space-y-4">
             <p>
               I am an innovative Software Engineer with technical expertise in all phases of the Software Development Lifecycle (SDLC).
-              My experience spans requirement analysis, documentation (HLD/LLD), coding, development, testing (UAT), go-live, 
+              My experience spans requirement analysis, documentation (HLD/LLD), coding, development, testing (UAT), go-live,
               post-implementation support, and end-user training.
             </p>
             <p>
@@ -24,7 +56,7 @@ const About = () => {
               Cloud, IDS, R&D, and Data Analytics Projects in various domains. I specialize in Data Analysis, Visualization & Reporting,
               interpreting large datasets to provide actionable insights for organizations.
             </p>
-            <p className="text-blue-300">
+            <p className="text-blue-300 font-semibold">
               I'm a collaborative team player, problem solver, and go-getter with proven ability to relate to people at any level of business
               and management, work under pressure, and meet tight deadlines.
             </p>
