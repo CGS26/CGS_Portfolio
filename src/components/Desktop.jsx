@@ -51,14 +51,14 @@ const Desktop = () => {
   const [storyStep, setStoryStep] = useState(0);
   const [storyNarrator, setStoryNarrator] = useState(null);
   const [desktopIcons, setDesktopIcons] = useState([
-    { id: 'about', title: 'About.exe', icon: <User size={24} />, position: { x: 50, y: 100 }, mobilePosition: { x: 20, y: 120 } },
-    { id: 'skills', title: 'Skills.exe', icon: <Code size={24} />, position: { x: 50, y: 200 }, mobilePosition: { x: 120, y: 120 } },
-    { id: 'experience', title: 'Work.exe', icon: <Briefcase size={24} />, position: { x: 50, y: 300 }, mobilePosition: { x: 220, y: 120 } },
-    { id: 'projects', title: 'Projects', icon: <Folder size={24} />, position: { x: 150, y: 100 }, mobilePosition: { x: 20, y: 220 } },
-    { id: 'awards', title: 'Awards.exe', icon: <Award size={24} />, position: { x: 150, y: 200 }, mobilePosition: { x: 120, y: 220 } },
-    { id: 'contact', title: 'Mail.exe', icon: <Mail size={24} />, position: { x: 150, y: 300 }, mobilePosition: { x: 220, y: 220 } },
-    { id: 'terminal', title: 'Terminal', icon: <TerminalIcon size={24} />, position: { x: 250, y: 100 }, mobilePosition: { x: 20, y: 320 } },
-    { id: 'settings', title: 'Settings', icon: <SettingsIcon size={24} />, position: { x: 250, y: 200 }, mobilePosition: { x: 120, y: 320 } },
+    { id: 'about', title: 'About.exe', icon: <User size={24} />, position: { x: 50, y: 100 }, mobilePosition: { x: 20, y: 150 } },
+    { id: 'skills', title: 'Skills.exe', icon: <Code size={24} />, position: { x: 50, y: 200 }, mobilePosition: { x: 120, y: 150 } },
+    { id: 'experience', title: 'Work.exe', icon: <Briefcase size={24} />, position: { x: 50, y: 300 }, mobilePosition: { x: 220, y: 150 } },
+    { id: 'projects', title: 'Projects', icon: <Folder size={24} />, position: { x: 150, y: 100 }, mobilePosition: { x: 20, y: 250 } },
+    { id: 'awards', title: 'Awards.exe', icon: <Award size={24} />, position: { x: 150, y: 200 }, mobilePosition: { x: 120, y: 250 } },
+    { id: 'contact', title: 'Mail.exe', icon: <Mail size={24} />, position: { x: 150, y: 300 }, mobilePosition: { x: 220, y: 250 } },
+    { id: 'terminal', title: 'Terminal', icon: <TerminalIcon size={24} />, position: { x: 250, y: 100 }, mobilePosition: { x: 70, y: 350 } },
+    { id: 'settings', title: 'Settings', icon: <SettingsIcon size={24} />, position: { x: 250, y: 200 }, mobilePosition: { x: 170, y: 350 } },
   ]);
 
   const storySequence = [
@@ -324,40 +324,56 @@ const Desktop = () => {
 
   return (
     <div
-      className="min-h-screen relative overflow-hidden"
+      className="min-h-screen relative overflow-hidden touch-pan-y"
       onContextMenu={handleContextMenu}
       onClick={closeContextMenu}
+      style={{
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        KhtmlUserSelect: 'none',
+        MozUserSelect: 'none',
+        msUserSelect: 'none',
+        userSelect: 'none'
+      }}
     >
-      {/* Mobile Detection and Responsive Adjustments */}
+      {/* Enhanced Mobile Detection and Controls */}
       <div className="fixed inset-0 pointer-events-none z-50">
+        {/* Mobile Status Indicator */}
         <motion.div
-          className="absolute top-4 left-4 text-xs text-white/30 font-mono"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.5 }}
+          className="absolute top-4 left-4 text-xs text-white/30 font-mono bg-black/20 backdrop-blur-sm px-2 py-1 rounded-full"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.7, scale: 1 }}
           transition={{ delay: 1 }}
         >
-          {typeof window !== 'undefined' && window.innerWidth < 768 ? '📱 Mobile Mode' : '💻 Desktop Mode'}
+          {typeof window !== 'undefined' && window.innerWidth < 768 ? '📱 Mobile Optimized' : '💻 Desktop Mode'}
         </motion.div>
-        {/* Mobile-specific controls */}
+
+        {/* Enhanced Mobile Controls */}
         {typeof window !== 'undefined' && window.innerWidth < 768 && (
           <motion.div
-            className="absolute top-4 right-4 flex space-x-2 pointer-events-auto"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5 }}
+            className="absolute top-4 right-4 flex flex-col space-y-2 pointer-events-auto"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.5, staggerChildren: 0.1 }}
           >
-            <button
+            <motion.button
               onClick={startStory}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-mono text-xs font-semibold shadow-lg transition-colors"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-4 py-3 rounded-xl font-semibold text-sm shadow-lg transition-all duration-300 flex items-center space-x-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              📖 Story
-            </button>
-            <button
+              <span className="text-lg">📖</span>
+              <span>Story</span>
+            </motion.button>
+            <motion.button
               onClick={() => setIsStartMenuOpen(!isStartMenuOpen)}
-              className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg font-mono text-xs font-semibold shadow-lg transition-colors"
+              className="bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white px-4 py-3 rounded-xl font-semibold text-sm shadow-lg transition-all duration-300 flex items-center space-x-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              ☰ Menu
-            </button>
+              <span className="text-lg">☰</span>
+              <span>Menu</span>
+            </motion.button>
           </motion.div>
         )}
       </div>
@@ -391,35 +407,47 @@ const Desktop = () => {
             }}
           />
         ))}
-        {/* Enhanced Dynamic Background with Rich Colors */}
+        {/* Enhanced Dynamic Background with Theme-Aware Colors */}
         <motion.div
           className="absolute inset-0"
           initial={{
-            background: "radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(10, 15, 25, 1) 100%)"
+            background: theme.isDarkMode
+              ? "radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.98) 50%, rgba(10, 15, 25, 1) 100%)"
+              : "radial-gradient(circle at 50% 50%, rgba(241, 245, 249, 0.95) 0%, rgba(226, 232, 240, 0.98) 50%, rgba(203, 213, 225, 1) 100%)"
           }}
-          animate={{
+          animate={theme.isDarkMode ? {
             background: [
-              "radial-gradient(circle at 20% 30%, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(20, 30, 48, 0.95) 100%)",
-              "radial-gradient(circle at 80% 70%, rgba(20, 30, 48, 0.9) 0%, rgba(30, 41, 59, 0.85) 50%, rgba(15, 23, 42, 0.95) 100%)",
-              "radial-gradient(circle at 50% 20%, rgba(25, 35, 52, 0.88) 0%, rgba(20, 30, 48, 0.92) 50%, rgba(30, 41, 59, 0.96) 100%)",
-              "radial-gradient(circle at 30% 80%, rgba(15, 23, 42, 0.9) 0%, rgba(25, 35, 52, 0.88) 50%, rgba(20, 30, 48, 0.95) 100%)"
+              "radial-gradient(circle at 20% 30%, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(20, 30, 48, 0.98) 100%)",
+              "radial-gradient(circle at 80% 70%, rgba(20, 30, 48, 0.95) 0%, rgba(30, 41, 59, 0.92) 50%, rgba(15, 23, 42, 0.98) 100%)",
+              "radial-gradient(circle at 50% 20%, rgba(25, 35, 52, 0.93) 0%, rgba(20, 30, 48, 0.96) 50%, rgba(30, 41, 59, 0.99) 100%)",
+              "radial-gradient(circle at 30% 80%, rgba(15, 23, 42, 0.95) 0%, rgba(25, 35, 52, 0.93) 50%, rgba(20, 30, 48, 0.98) 100%)"
+            ]
+          } : {
+            background: [
+              "radial-gradient(circle at 20% 30%, rgba(226, 232, 240, 0.92) 0%, rgba(241, 245, 249, 0.95) 50%, rgba(203, 213, 225, 0.98) 100%)",
+              "radial-gradient(circle at 80% 70%, rgba(203, 213, 225, 0.95) 0%, rgba(226, 232, 240, 0.92) 50%, rgba(241, 245, 249, 0.98) 100%)",
+              "radial-gradient(circle at 50% 20%, rgba(148, 163, 184, 0.93) 0%, rgba(203, 213, 225, 0.96) 50%, rgba(226, 232, 240, 0.99) 100%)",
+              "radial-gradient(circle at 30% 80%, rgba(241, 245, 249, 0.95) 0%, rgba(148, 163, 184, 0.93) 50%, rgba(203, 213, 225, 0.98) 100%)"
             ]
           }}
           transition={{
-            duration: 20,
+            duration: 25,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
 
-        {/* Enhanced Interactive Particle Network */}
+        {/* Enhanced Interactive Particle Network - Theme Aware */}
         <div className="absolute inset-0">
           {[...Array(25)].map((_, i) => {
             const size = 1.5 + Math.random() * 4;
             const speed = 8 + Math.random() * 15;
             const delay = Math.random() * 8;
-            const colors = ['from-cyan-400 to-blue-500', 'from-purple-400 to-pink-500', 'from-blue-400 to-cyan-500', 'from-green-400 to-blue-500'];
+            const darkColors = ['from-cyan-400 to-blue-500', 'from-purple-400 to-pink-500', 'from-blue-400 to-cyan-500', 'from-indigo-400 to-purple-500'];
+            const lightColors = ['from-blue-400 to-indigo-500', 'from-purple-400 to-pink-400', 'from-cyan-400 to-blue-400', 'from-indigo-400 to-purple-400'];
+            const colors = theme.isDarkMode ? darkColors : lightColors;
             const colorClass = colors[i % colors.length];
+            const shadowColor = theme.isDarkMode ? 'rgba(56, 189, 248, 0.3)' : 'rgba(59, 130, 246, 0.25)';
             return (
               <motion.div
                 key={`particle-${i}`}
@@ -429,12 +457,12 @@ const Desktop = () => {
                   height: `${size}px`,
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  boxShadow: `0 0 ${size * 3}px ${size}px rgba(56, 189, 248, 0.3)`
+                  boxShadow: `0 0 ${size * 3}px ${size}px ${shadowColor}`
                 }}
                 animate={{
                   x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
                   y: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
-                  opacity: [0.2, 0.9, 0.2],
+                  opacity: [0.15, 0.8, 0.15],
                   scale: [0.5, 1.5, 0.5]
                 }}
                 transition={{
@@ -723,27 +751,35 @@ const Desktop = () => {
           </motion.div>
         </div>
 
-        {/* Story Narrator */}
+        {/* Enhanced Story Narrator with Mobile Optimization */}
         {storyNarrator && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-40 max-w-2xl"
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -50, scale: 0.9 }}
+            className={`fixed z-40 ${
+              typeof window !== 'undefined' && window.innerWidth < 768
+                ? 'bottom-24 left-4 right-4 max-w-none'
+                : 'bottom-20 left-1/2 transform -translate-x-1/2 max-w-2xl'
+            }`}
           >
-            <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-600/50 rounded-xl p-6 shadow-2xl">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white text-xl">📖</span>
+            <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-600/50 rounded-xl p-4 md:p-6 shadow-2xl">
+              <div className={`flex items-start space-x-3 md:space-x-4 ${
+                typeof window !== 'undefined' && window.innerWidth < 768 ? 'flex-col space-y-3' : ''
+              }`}>
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mx-auto md:mx-0">
+                  <span className="text-white text-lg md:text-xl">📖</span>
                 </div>
-                <div className="flex-1">
-                  <p className="text-slate-200 font-mono text-sm leading-relaxed mb-4">
+                <div className="flex-1 text-center md:text-left">
+                  <p className="text-slate-200 font-mono text-sm md:text-base leading-relaxed mb-4">
                     {storyNarrator}
                   </p>
-                  <div className="flex items-center space-x-3">
+                  <div className={`flex items-center space-x-3 ${
+                    typeof window !== 'undefined' && window.innerWidth < 768 ? 'justify-center' : ''
+                  }`}>
                     <button
                       onClick={nextStoryStep}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-mono text-sm font-semibold transition-colors"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-mono text-sm font-semibold transition-colors shadow-lg"
                     >
                       {storyStep < storySequence.length - 1 ? 'Continue →' : 'Finish Story'}
                     </button>
@@ -839,6 +875,13 @@ const Desktop = () => {
             });
             openWindow(icon.id);
           }}
+          onTouchEnd={(e) => {
+            // Handle single tap on mobile
+            if (typeof window !== 'undefined' && window.innerWidth < 768) {
+              e.preventDefault();
+              openWindow(icon.id);
+            }
+          }}
         >
           <div className="flex flex-col items-center p-4 rounded-2xl group-hover:bg-white/15 backdrop-blur-md transition-all duration-500 border border-transparent group-hover:border-white/20">
             <motion.div
@@ -907,28 +950,28 @@ const Desktop = () => {
         );
       })}
 
-      {/* Modern Taskbar */}
-      <div className={`fixed bottom-0 left-0 right-0 h-12 ${theme.colors.surface} backdrop-blur-xl border-t ${theme.colors.border} flex items-center justify-between px-3 z-30 shadow-2xl`}>
-        <div className="flex items-center space-x-2">
-          {/* Start Button */}
+      {/* Enhanced Professional Taskbar with Mobile Optimization */}
+      <div className={`fixed bottom-0 left-0 right-0 ${typeof window !== 'undefined' && window.innerWidth < 768 ? 'h-20' : 'h-16'} ${theme.colors.cardBg} backdrop-blur-xl border-t ${theme.colors.border} flex items-center justify-between px-3 md:px-4 z-30 shadow-2xl`}>
+        <div className="flex items-center space-x-2 md:space-x-3 flex-1 min-w-0">
+          {/* Enhanced Start Button */}
           <motion.button
             onClick={() => setIsStartMenuOpen(!isStartMenuOpen)}
-            className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-300 shadow-lg ${
-              isStartMenuOpen 
-                ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+            className={`flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 rounded-xl transition-all duration-300 shadow-lg ${
+              isStartMenuOpen
+                ? 'bg-gradient-to-r from-blue-500 to-blue-600'
                 : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600'
             }`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center text-blue-600 text-xs font-bold">
+            <div className="w-5 h-5 md:w-6 md:h-6 bg-white rounded-lg flex items-center justify-center text-blue-600 text-xs md:text-sm font-bold shadow-sm">
               GS
             </div>
-            <span className="text-white text-sm font-semibold hidden sm:block">Start</span>
+            <span className="text-white text-xs md:text-sm font-semibold hidden sm:block">Start</span>
           </motion.button>
 
-          {/* Taskbar Items */}
-          <div className="flex space-x-0.5">
+          {/* Enhanced Taskbar Items with Mobile Optimization */}
+          <div className="flex space-x-1 overflow-x-auto scrollbar-hide max-w-full">
             {Object.entries(openWindows).map(([windowId, windowState]) => {
               const config = windowConfigs[windowId];
               const isFocused = focusedWindow === windowId;
@@ -936,39 +979,55 @@ const Desktop = () => {
                 <motion.button
                   key={windowId}
                   onClick={() => openWindow(windowId)}
-                  className={`flex items-center space-x-1 px-1.5 py-1.5 rounded transition-all duration-300 relative ${
-                    minimizedWindows[windowId] 
-                      ? `${theme.colors.surface} ${theme.colors.textMuted}` 
+                  className={`flex items-center space-x-1 md:space-x-2 px-2 py-2 md:px-3 rounded-lg transition-all duration-300 relative min-w-max ${
+                    minimizedWindows[windowId]
+                      ? `${theme.colors.surface} ${theme.colors.textMuted} hover:bg-slate-700/50`
                       : isFocused
-                      ? 'bg-blue-600/20 text-blue-200 border border-blue-500/30'
-                      : `${theme.colors.surface} ${theme.colors.textSecondary} ${theme.colors.surfaceHover}`
+                      ? 'bg-blue-600/20 text-blue-200 border border-blue-500/30 shadow-md'
+                      : `${theme.colors.surface} ${theme.colors.textSecondary} hover:bg-slate-700/30`
                   }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <div className="w-4 h-4 flex items-center justify-center">
+                  <div className="w-4 h-4 md:w-5 md:h-5 flex items-center justify-center flex-shrink-0">
                     {config.icon}
                   </div>
-                  <span className="text-xs max-w-12 truncate hidden md:block">
+                  <span className="text-xs max-w-12 md:max-w-16 truncate hidden md:block font-medium">
                     {config.title.split(' - ')[0]}
                   </span>
                   {isFocused && (
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-blue-400 rounded-full" />
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 md:w-6 h-0.5 bg-blue-400 rounded-full" />
                   )}
                 </motion.button>
               );
             })}
           </div>
         </div>
-        
-        {/* Windows-like Sidebar */}
-        <SystemTray
-          currentTime={currentTime}
-          notifications={notifications}
-          onDismissNotification={dismissNotification}
-          onClearNotifications={clearAllNotifications}
-          onOpenSettings={() => openWindow('settings')}
-        />
+
+        {/* Professional Career Dashboard - Wider Layout */}
+        <div className="flex items-center space-x-2">
+          {/* Time Display */}
+          {/* <motion.div
+            className={`flex items-center ${theme.colors.cardBg} px-3 py-2 rounded-lg ${theme.colors.border} border shadow-sm`}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className={`${theme.colors.text} text-sm font-bold font-mono mr-2`}>
+              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <div className={`${theme.colors.textMuted} text-xs font-mono`}>
+              {currentTime.toLocaleTimeString([], { hour12: true }).split(' ')[1]}
+            </div>
+          </motion.div> */}
+
+          {/* Wider Career Dashboard */}
+          <SystemTray
+            currentTime={currentTime}
+            notifications={notifications}
+            onDismissNotification={dismissNotification}
+            onClearNotifications={clearAllNotifications}
+            onOpenSettings={() => openWindow('settings')}
+          />
+        </div>
       </div>
 
       {/* Start Menu */}

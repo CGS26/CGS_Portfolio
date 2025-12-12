@@ -36,27 +36,33 @@ export const ThemeProvider = ({ children }) => {
     isDarkMode,
     toggleTheme,
     colors: isDarkMode ? {
-      // Dark theme colors
-      background: 'from-indigo-900 via-purple-900 to-slate-900',
-      surface: 'bg-slate-800/95',
-      surfaceHover: 'hover:bg-slate-700/50',
-      text: 'text-white',
-      textSecondary: 'text-slate-300',
+      // Enhanced Dark theme colors - Modern Professional Palette
+      background: 'from-slate-950 via-indigo-950 to-purple-950',
+      surface: 'bg-slate-900/98',
+      surfaceHover: 'hover:bg-slate-800/60',
+      text: 'text-slate-50',
+      textSecondary: 'text-slate-200',
       textMuted: 'text-slate-400',
-      border: 'border-slate-600/50',
-      accent: 'bg-blue-600',
-      accentHover: 'hover:bg-blue-500'
+      border: 'border-slate-700/60',
+      accent: 'bg-gradient-to-r from-cyan-500 to-blue-600',
+      accentHover: 'hover:from-cyan-400 hover:to-blue-500',
+      cardBg: 'bg-gradient-to-br from-slate-800/90 to-slate-900/90',
+      buttonPrimary: 'bg-gradient-to-r from-blue-600 to-purple-600',
+      buttonSecondary: 'bg-gradient-to-r from-slate-700 to-slate-600'
     } : {
-      // Light theme colors
-      background: 'from-blue-50 via-indigo-50 to-purple-50',
-      surface: 'bg-white/95',
-      surfaceHover: 'hover:bg-gray-100/50',
-      text: 'text-gray-900',
-      textSecondary: 'text-gray-700',
-      textMuted: 'text-gray-500',
-      border: 'border-gray-300/50',
-      accent: 'bg-blue-600',
-      accentHover: 'hover:bg-blue-700'
+      // Enhanced Light theme colors - Clean Modern Palette
+      background: 'from-slate-50 via-blue-50 to-indigo-50',
+      surface: 'bg-white/98',
+      surfaceHover: 'hover:bg-slate-100/60',
+      text: 'text-slate-900',
+      textSecondary: 'text-slate-700',
+      textMuted: 'text-slate-500',
+      border: 'border-slate-200/60',
+      accent: 'bg-gradient-to-r from-blue-500 to-indigo-600',
+      accentHover: 'hover:from-blue-400 hover:to-indigo-500',
+      cardBg: 'bg-gradient-to-br from-white/90 to-slate-50/90',
+      buttonPrimary: 'bg-gradient-to-r from-blue-500 to-indigo-600',
+      buttonSecondary: 'bg-gradient-to-r from-slate-100 to-slate-200'
     }
   };
 
