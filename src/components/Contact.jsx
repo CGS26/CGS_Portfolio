@@ -77,25 +77,25 @@ const Contact = () => {
             
             <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
             <div className="space-y-4">
-              <ContactInfo 
-                icon={<PhoneIcon />} 
-                label="Phone" 
-                value="+91-7337225784" 
+              <ContactInfo
+                icon={<PhoneIcon />}
+                label="Phone"
+                value="+49 15563933355"
               />
-              <ContactInfo 
-                icon={<EmailIcon />} 
-                label="Email" 
-                value="gauravsushant267@gmail.com" 
+              <ContactInfo
+                icon={<EmailIcon />}
+                label="Email"
+                value="gauravsushant267@gmail.com"
               />
-              <ContactInfo 
-                icon={<LinkedinIcon />} 
-                label="LinkedIn" 
-                value="linkedin.com/in/gaurav-sushant-cherukuri" 
+              <ContactInfo
+                icon={<LinkedinIcon />}
+                label="LinkedIn"
+                value="linkedin.com/in/gaurav-sushant-cherukuri"
               />
-              <ContactInfo 
-                icon={<LocationIcon />} 
-                label="Location" 
-                value="Hyderabad, India" 
+              <ContactInfo
+                icon={<LocationIcon />}
+                label="Location"
+                value="Dresden, Germany"
               />
             </div>
           </div>

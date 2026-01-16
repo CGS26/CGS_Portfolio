@@ -5,43 +5,55 @@ import ExperienceCard from './common/ExperienceCard';
 const Experience = () => {
   const experiences = [
     {
-      title: "Trainee Intern",
-      company: "Xyenta",
-      period: "Aug 2024 - Present",
+      title: "Freelance Developer",
+      company: "Prepstreak, UK",
+      period: "Apr 2025 – Jun 2025",
+      location: "Remote",
+      responsibilities: [
+        "Built cross-platform mobile learning app for grades 4–6 using React Native + Supabase",
+        "Implemented personalized content + real-time tracking with gamification features (streak rewards)",
+        "Improved engagement/retention through interactive UI/UX design",
+        "Automated PDF-to-SQL data ingestion pipeline converting SAT practice PDFs to structured relational DB",
+        "Used Python processing with LangChain + LlamaIndex for extraction/clean/normalize",
+        "Applied LLM-assisted semantic parsing + validation for schema consistency + accuracy",
+        "Orchestrated using n8n for automated, repeatable, fault-tolerant execution",
+        "Reduced manual data entry; enabled scalable DB-driven features"
+      ]
+    },
+    {
+      title: "Intern",
+      company: "Xyenta, Hyderabad, India",
+      period: "Jan 2025 – Jun 2025",
       location: "Hyderabad",
       responsibilities: [
-        "Managed MSSQL Servers and performed SCD Type 1 and Type 2 Transformations",
-        "Designed & implemented ETL Processes from staging to dimension and fact tables",
-        "Worked with cross-functional teams to gather requirements and deliver innovative data solutions",
-        "Leveraged Microsoft Azure and SQL Server to address complex data challenges",
-        "Utilized Apache Flink to process data in parallel and transform data for analysis",
-        "Created pipelines using Azure Data Factory (ADF) to streamline business processes"
+        "Designed/implemented scalable performance-aware software components for compute-intensive workloads",
+        "Developed backend services using Python + cloud infrastructure",
+        "Migrated CPU-intensive tasks to AWS Lambda; achieved 10% downtime reduction, 40% cost savings",
+        "Managed CI/CD pipelines, version control, and system reliability"
+      ]
+    },
+    {
+      title: "Trainee Intern",
+      company: "Xyenta, Hyderabad, India",
+      period: "Aug 2024 – Dec 2024",
+      location: "Hyderabad",
+      responsibilities: [
+        "Performed SCD Type 1 & 2 transformations on MSSQL databases",
+        "Designed ETL pipelines with Azure Data Factory for data processing",
+        "Utilized parallel processing with Apache Flink for enhanced performance",
+        "Improved data accessibility and pipeline efficiency for product planning decisions"
       ]
     },
     {
       title: "Research Intern",
-      company: "Precog@IIITD",
-      period: "Feb 2024 - Jul 2024",
+      company: "Precog@IIITD, Hyderabad, India",
+      period: "Feb 2024 – Aug 2024",
       location: "Hyderabad",
       responsibilities: [
-        "Led collaborative efforts in NLP and AI Ethics Initiatives and research projects",
-        "Worked with interdisciplinary teams to deliver innovative research outcomes",
-        "Created an analytical dashboard for the last 3 Indian Elections and integrated models for functionalities like fake news detection",
-        "Conducted NLP research on factors affecting crowdfunding success and the impact of natural/man-made disasters"
-      ]
-    },
-    {
-      title: "Infosec Intern",
-      company: "Newmark",
-      period: "Jun 2023 - Aug 2023",
-      location: "Hyderabad",
-      responsibilities: [
-        "Automated Sentinel using Playbooks, improved Firewall Configurations and Proactive Threat Management",
-        "Conducted Security Incident Log Analysis and linked incidents with Advanced Threat Protection (ATP) tools",
-        "Automated events in Security Information & Event Management (SIEM) to rapidly detect incidents",
-        "Developed Near Real-Time Rules for quickly sending alerts across Teams",
-        "Implemented Automated Incident Response for efficient threat containment and mitigation",
-        "Contributed to Threat Hunting and Investigation through automation of context analysis"
+        "Developed/evaluated NLP + ML models focusing on efficient inference + system integration",
+        "Built analytical dashboards + predictive pipelines for data-driven AI systems",
+        "Conducted research in Linux-based environments with reproducible experimentation",
+        "Performed benchmarking/testing/validation for real-world deployment"
       ]
     }
   ];

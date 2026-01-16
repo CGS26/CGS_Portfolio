@@ -95,7 +95,7 @@ const projects = [
     period: "Oct 2024 - Nov 2024",
     category: "Full Stack | Cloud",
     description:
-      "Designed a Web Application for efficient leave management, streamlining the approval process and reducing administrative workload by 25%.",
+      "Problem: Inefficient leave management processes causing administrative overhead.\n\nSolution: Designed web application for streamlined leave approvals.\n\nTech: Next.js, TypeScript, Material UI, Firebase, Cloud.\n\nImpact: Reduced administrative workload by 25%.\n\nMy Role: Full-stack development, UI/UX design, cloud deployment.\n\nLinks: Website - http://keppa.vercel.app",
     technologies: ["Next.js", "TypeScript", "Material UI", "Firebase", "Cloud"],
     websitelink: "http://keppa.vercel.app",
   },
@@ -104,7 +104,7 @@ const projects = [
     period: "Aug 2024 - Sep 2024",
     category: "Full Stack | Cloud | GENAI | LLM",
     description:
-      "Created an LLM-based OCR Document Converter, enabling users to interact with documents through chats. Implemented a user-friendly interface.",
+      "Problem: Need for interactive document processing beyond static OCR.\n\nSolution: Created LLM-based OCR converter with chat interface.\n\nTech: Next.js, Flask, Ollama, LLM, OCR, GenAI.\n\nImpact: Enabled conversational document interaction.\n\nMy Role: Full-stack development, AI integration, interface design.\n\nLinks: GitHub - https://github.com/CGS26/docu-web, Website - http://docu-team.web.app",
     technologies: ["Next.js", "Flask", "Ollama", "LLM", "OCR", "GenAI"],
     github: "https://github.com/CGS26/docu-web",
     websitelink: "http://docu-team.web.app",
@@ -114,7 +114,7 @@ const projects = [
     period: "May 2024 - June 2024",
     category: "Full Stack | Node.js | Productivity",
     description:
-      "Developed a minimal yet powerful note-taking app using Node.js and Express. Provides features like markdown support, search, and cloud sync.",
+      "Problem: Lack of powerful yet minimal note-taking tools with cloud sync.\n\nSolution: Developed Node.js app with markdown, search, and cloud features.\n\nTech: FastApi, SQLite, React, Tailwind CSS.\n\nImpact: Provided efficient productivity tool for users.\n\nMy Role: Backend development, database design, frontend integration.\n\nLinks: GitHub - https://github.com/CGS26/Notes_app",
     technologies: ["FastApi", "SQllite", "React", "Tailwind CSS"],
     github: "https://github.com/CGS26/Notes_app",
   },
@@ -123,7 +123,7 @@ const projects = [
     period: "Jan 2024 - Feb 2024",
     category: "Network Security | IOT | Deep Learning",
     description:
-      "Developed a dual CNN Model to enhance Network Security, thereby improving detection rates by 30%. Utilized Python and PyTorch for implementation.",
+      "Problem: Inadequate detection rates in network security for IoT.\n\nSolution: Developed dual CNN model for enhanced intrusion detection.\n\nTech: Python, PyTorch, Deep Learning, CNN, Network Security.\n\nImpact: Improved detection rates by 30%.\n\nMy Role: Model development, implementation, evaluation.\n\nLinks: N/A",
     technologies: [
       "Python",
       "PyTorch",
@@ -132,13 +132,12 @@ const projects = [
       "Network Security",
     ],
   },
-
   {
     title: "Seminar Planner",
     period: "Jan 2023 - Mar 2024",
     category: "MERN | Web Application",
     description:
-      "Built a Web App using MERN stack to streamline faculty scheduling, report generation & data management for educational institutions.",
+      "Problem: Manual faculty scheduling and report generation in educational institutions.\n\nSolution: Built MERN stack web app for streamlined management.\n\nTech: MongoDB, Express.js, React, Node.js, Web Development.\n\nImpact: Improved scheduling and data management efficiency.\n\nMy Role: Full-stack development, database design, feature implementation.\n\nLinks: N/A",
     technologies: [
       "MongoDB",
       "Express.js",
@@ -189,48 +188,6 @@ const Projects = () => {
               websitelink={project.websitelink}
             />
           ))}
-        </div>
-
-        <div className="mt-12">
-          <h3 className="text-2xl font-semibold mb-6 text-blue-800">
-            Research Papers
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* {researchPapers.map((paper, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                <h4 className="text-lg font-semibold text-blue-700 mb-2 flex items-center">
-                  {paper.title} 
-                  <a href={paper.link} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-600">
-                    <ExternalLink size={18} />
-                  </a>
-                </h4>
-                <p className="text-gray-700">{paper.description}</p>
-              </div>
-            ))} */}
-            {researchPapers.map((paper, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                <h4 className="text-lg font-semibold text-blue-700 mb-2 flex items-center">
-                  {paper.title}
-                  {paper.link && (
-                    <div className="relative group ml-2">
-                      <a
-                        href={paper.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 transition"
-                      >
-                        <ExternalLink size={18} />
-                      </a>
-                      <span className="absolute bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {paper.link}
-                      </span>
-                    </div>
-                  )}
-                </h4>
-                <p className="text-gray-700">{paper.description}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

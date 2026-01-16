@@ -8,34 +8,33 @@ const About = () => {
         <SectionHeader title="About Me" />
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h3 className="text-2xl font-semibold mb-4 text-blue-800">Software Engineer & Data Scientist</h3>
+            <h3 className="text-2xl font-semibold mb-4 text-blue-800">Working Student Availability</h3>
             <p className="text-gray-700 mb-4">
-              I am an innovative Software Engineer with technical expertise in all phases of the Software Development Lifecycle (SDLC).
-              My experience spans requirement analysis, documentation (HLD/LLD), coding, development, testing (UAT), go-live, 
-              post-implementation support, and end-user training.
+              Available for Working Student positions up to 20 hours per week during semester breaks and academic periods.
+              Based in Dresden, Germany, with strong foundation in ML systems and performance-critical development.
             </p>
             <p className="text-gray-700 mb-4">
-              As a results-driven Project Lead, I've executed diverse Full Stack / Web Application Development, Process Automation,
-              Cloud, IDS, R&D, and Data Analytics Projects in various domains. I specialize in Data Analysis, Visualization & Reporting,
-              interpreting large datasets to provide actionable insights for organizations.
+              Security-minded approach to development, ensuring robust and reliable systems in production environments.
             </p>
-            <p className="text-gray-700">
-              I'm a collaborative team player, problem solver, and go-getter with proven ability to relate to people at any level of business
-              and management, work under pressure, and meet tight deadlines.
+            <h3 className="text-xl font-semibold mb-4 text-blue-800">Now / Next</h3>
+            <p className="text-gray-700 mb-4">
+              Currently exploring full-stack development with modern frameworks, AI/ML model deployment and optimization,
+              Java-based enterprise applications, and cloud-native architectures. Building expertise in scalable systems
+              and performance-critical software development.
             </p>
           </div>
           <div>
-            <h3 className="text-2xl font-semibold mb-4 text-blue-800">Education & Certification</h3>
+            <h3 className="text-2xl font-semibold mb-4 text-blue-800">Education</h3>
             <div className="mb-6 bg-gray-50 p-4 rounded-lg shadow-sm">
-              <h4 className="text-lg font-semibold text-blue-700">Bachelor of Technology (B.Tech.)</h4>
-              <p className="text-gray-700">Data Science & Artificial Intelligence</p>
-              <p className="text-gray-600">ICFAI Foundation for Higher Education, Hyderabad</p>
-              <p className="text-gray-600">Aug 2021 – Jun 2025</p>
+              <h4 className="text-lg font-semibold text-blue-700">Master's in Computational Modeling and Simulation</h4>
+              <p className="text-gray-700">Ongoing</p>
+              <p className="text-gray-600">Dresden, Germany</p>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-              <h4 className="text-lg font-semibold text-blue-700">Deep Learning Specialization</h4>
-              <p className="text-gray-700">Deep Learning.AI by Andrew Ng</p>
-              <p className="text-gray-600">Coursera, Jun 2024</p>
+              <h4 className="text-lg font-semibold text-blue-700">Bachelor of Technology in Data Science and Artificial Intelligence</h4>
+              <p className="text-gray-700">CGPA: 10.0</p>
+              <p className="text-gray-600">ICFAI Foundation for Higher Education, Hyderabad</p>
+              <p className="text-gray-600">Aug 2021 – June 2025</p>
             </div>
           </div>
         </div>

@@ -3,62 +3,81 @@ import SectionHeader from './common/SectionHeader';
 import SkillCategory from './common/SkillCategory';
 
 const Skills = () => {
-  const programmingSkills = [
-    "Java, Python, JavaScript",
-    "HTML, CSS, SQL, Solidity",
-    "Node.js, React.js, Express.js",
-    "Next.js, Angular",
-    "Git, GitHub, Bitbucket",
-    "Django, Flask"
+  const programmingSystems = [
+    "Python (Advanced)",
+    "C/C++ (Working Knowledge)",
+    "Java",
+    "Linux",
+    "Bash",
+    "Git"
   ];
 
-  const databaseSkills = [
-    "MySQL, MongoDB, MSSQL",
-    "Azure, AWS",
-    "Azure Data Factory (ADF)",
-    "REST API, API Integration",
-    "ETL Processes",
-    "Database Administration"
+  const mlAi = [
+    "PyTorch",
+    "TensorFlow",
+    "Keras",
+    "Scikit-Learn",
+    "Neural Networks",
+    "CNNs",
+    "NLP",
+    "Computer Vision"
   ];
 
-  const aiSkills = [
-    "Deep Learning, Machine Learning",
-    "Data Analysis & Visualization",
-    "TensorFlow, Matplotlib",
-    "Predictive Modeling",
-    "Apache Kafka, PySpark",
-    "Apache Flink"
+  const modelDeployment = [
+    "ML inference pipelines",
+    "Model optimization",
+    "ONNX (familiarity)",
+    "Performance-aware software design",
+    "Heterogeneous compute workloads"
   ];
 
-  const devopsSkills = [
-    "Microservices",
-    "Docker, Containerization",
-    "Shell Scripting",
+  const cloudTooling = [
+    "AWS",
+    "Azure",
+    "Google Cloud",
+    "Docker",
     "Kubernetes",
-    "CI/CD Pipelines",
-    "Cloud Enablement"
+    "Azure Data Factory",
+    "GitLab CI/CD"
+  ];
+
+  const dataDatabases = [
+    "MySQL",
+    "MSSQL",
+    "MongoDB",
+    "NoSQL",
+    "Statistics",
+    "Probability",
+    "Data Analysis"
+  ];
+
+  const frameworksSecondary = [
+    "Flask",
+    "Node.js",
+    "React",
+    "Next.js"
   ];
 
   const softSkills = [
-    "Effective Communication",
-    "Analytical Thinking",
-    "Problem-Solving",
-    "Team Collaboration",
-    "Project Management",
-    "Attention to Detail"
+    "Analytical thinking",
+    "Independent working style",
+    "Attention to detail",
+    "Collaboration"
   ];
 
   return (
     <section id="skills" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <SectionHeader title="Skills & Expertise" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <SkillCategory title="Programming & Development" skills={programmingSkills} />
-          <SkillCategory title="Database & Cloud" skills={databaseSkills} />
-          <SkillCategory title="AI & Data Science" skills={aiSkills} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <SkillCategory title="Programming & Systems" skills={programmingSystems} />
+          <SkillCategory title="ML & AI" skills={mlAi} />
+          <SkillCategory title="Model Deployment & Systems" skills={modelDeployment} />
+          <SkillCategory title="Cloud & Tooling" skills={cloudTooling} />
+          <SkillCategory title="Data & Databases" skills={dataDatabases} />
+          <SkillCategory title="Frameworks (Secondary)" skills={frameworksSecondary} />
         </div>
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SkillCategory title="DevOps & Architecture" skills={devopsSkills} />
+        <div className="mt-12">
           <SkillCategory title="Soft Skills" skills={softSkills} />
         </div>
       </div>

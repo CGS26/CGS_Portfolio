@@ -159,16 +159,14 @@ const Hero = () => {
       //   'Network Security Expert'
       // ],
       strings: [
-        "IT Professional",
-        "Software Engineer",
-        "Full Stack Developer",
-        "AI/ML Specialist",
-        "Deep Learning Researcher",
-        "Cloud & DevOps Engineer",
-        "Database Engineer",
-        "Cybersecurity Analyst",
-        "Software Development Engineer",
-        "NLP & AI Ethics Researcher",
+        "Working Student Candidate",
+        "ML Systems Engineer",
+        "Edge-AI Developer",
+        "AI Compiler Enthusiast",
+        "Heterogeneous Computing Specialist",
+        "Performance-Critical Software Engineer",
+        "Python ML Developer",
+        "Linux Systems Integrator",
       ],
       typeSpeed: 50,
       backSpeed: 40,
@@ -220,7 +218,7 @@ const Hero = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7, duration: 0.8 }}
           >
-            B.Tech in Data Science & AI | Deep Learning Certified
+            Master's student (Computational Modeling and Simulation) with strong foundation in Machine Learning, full-stack development, and performance-critical software. Seeking Working Student role to contribute to AI/ML applications, Java enterprise systems, and scalable cloud solutions. Experience: Python ML development, Java programming, full-stack web development.
           </motion.p>
           {/* <motion.div
             className="text-lg mb-8 space-y-3"
